@@ -20,7 +20,7 @@ class CompletionModel(Block):
         timeout: The maximum time to wait for the model to warm up.
 
     Example:
-        ```
+        ```python
         from prefect_openai import CompletionModel
 
         completion_model = CompletionModel.load("BLOCK_NAME")
