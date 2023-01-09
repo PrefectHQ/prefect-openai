@@ -9,10 +9,26 @@ from prefect.utilities.asyncutils import sync_compatible
 class CompletionModel(Block):
     """
     A block that contains config for an OpenAI Completion Model.
+
+    Attributes:
+        openai_credentials: The credentials used to authenticate with OpenAI.
+        model: ID of the model to use.
+        temperature: The temperature of the model.
+        max_tokens: The maximum number of tokens to generate.
+        suffix: The suffix to append to the prompt.
+        echo: Whether to echo the prompt.
+        timeout: The maximum time to wait for the model to warm up.
+
+    Example:
+        ```
+        from prefect_openai import CompletionModel
+
+        completion_model = CompletionModel.load("BLOCK_NAME")
+        ```    
     """
 
     openai_credentials: OpenAICredentials = Field(default=..., description="The credentials used to authenticate with OpenAI.")
-    model: str = Field(default=..., description="ID of the model to use.")
+    model: str = Field(default="text-curie-001", description="ID of the model to use.")
     temperature: float = Field(default=0.5, description="The temperature of the model.")
     max_tokens: int = Field(default=16, description="The maximum number of tokens to generate.")
     suffix: Optional[str] = Field(default=None, description="The suffix to append to the prompt.")
@@ -48,5 +64,5 @@ class CompletionModel(Block):
 
         return await client.Completion.acreate(
             prompt=prompt,
-            **acreate_kwargs
+            **input_kwargs
         )
