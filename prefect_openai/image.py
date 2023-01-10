@@ -20,6 +20,8 @@ class ImageModel(Block):
     Attributes:
         openai_credentials: The credentials used to authenticate with OpenAI.
         size: The size of the image to generate.
+        n: The number of images to generate.
+        response_format: The format of the image to generate.
 
     Example:
         Load a configured block:
