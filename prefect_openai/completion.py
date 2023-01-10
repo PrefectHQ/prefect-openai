@@ -51,18 +51,21 @@ class CompletionModel(Block):
     _logo_url = "https://images.ctfassets.net/gm98wzqotmnx/QE8JwcbZBmIfiognXDLcY/2bcd4c759f877d37159f576101218b49/open-ai-logo-8B9BFEDC26-seeklogo.com.png?h=250"  # noqa
 
     @sync_compatible
-    async def create(
+    async def submit_prompt(
         self, prompt: str, **acreate_kwargs: Dict[str, Any]
     ) -> OpenAIObject:
         """
-        Create an OpenAI completion given a text prompt. OpenAI will return an object
-        potentially containing multiple `choices`, where the zeroth index is what they
-        consider the "best" completion.
+        Submits a prompt for the model to generate a text completion.
+        OpenAI will return an object potentially containing multiple `choices`,
+        where the zeroth index is what they consider the "best" completion.
+        Learn more in the [OpenAPI Text Completion docs](
+            https://beta.openai.com/docs/guides/completion)
 
         Args:
             prompt: The prompt to use for the completion.
             **acreate_kwargs: Additional keyword arguments to pass
-                to `openai.Completion.acreate`.
+                to [`openai.Completion.acreate`](
+                https://beta.openai.com/docs/api-reference/completions/create).
 
         Returns:
             The OpenAIObject containing the completion and associated metadata.
@@ -82,9 +85,8 @@ class CompletionModel(Block):
                 )
 
                 for prompt in ["hi!", "what is the meaning of life?"]:
-                    completion = completion_model.create(prompt)
+                    completion = completion_model.submit_prompt(prompt)
                     print(completion.choices[0].text)
-
             ```
         """
         client = self.openai_credentials.get_client()

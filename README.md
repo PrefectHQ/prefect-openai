@@ -57,7 +57,7 @@ def my_ai_bot(model_name: str = "text-davinci-003")
     )
 
     for prompt in ["hi!", "what is the meaning of life?"]:
-        completion = completion_model.create(prompt)
+        completion = completion_model.submit_prompt(prompt)
         print(completion.choices[0].text)
 ```
 

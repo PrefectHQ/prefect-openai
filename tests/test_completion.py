@@ -8,7 +8,7 @@ def test_completion_model_create(mock_openai_credentials: MagicMock):
         openai_credentials=mock_openai_credentials, temperature=0.88
     )
     prompt = "what is meaning of meaning"
-    completion_model.create(prompt)
+    completion_model.submit_prompt(prompt)
     mock_openai_credentials._mock_completion.acreate.assert_called_once_with(
         prompt="what is meaning of meaning",
         model="text-curie-001",
@@ -25,7 +25,7 @@ def test_completion_model_create_override(mock_openai_credentials: MagicMock):
         openai_credentials=mock_openai_credentials, temperature=0.88
     )
     prompt = "what is meaning of meaning"
-    completion_model.create(prompt, temperature=0.28, max_tokens=8)
+    completion_model.submit_prompt(prompt, temperature=0.28, max_tokens=8)
     mock_openai_credentials._mock_completion.acreate.assert_called_once_with(
         prompt="what is meaning of meaning",
         model="text-curie-001",
