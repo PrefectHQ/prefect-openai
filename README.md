@@ -52,7 +52,7 @@ from prefect.context import get_run_context
 from prefect_openai import OpenAICredentials, ImageModel, CompletionModel
 
 @flow
-def create_image():
+def create_story_and_image_from_flow_run_name():
     logger = get_run_logger()
     context = get_run_context()
     flow_run_name = context.flow_run.name.replace("-", " ")
