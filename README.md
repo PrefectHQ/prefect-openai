@@ -77,6 +77,9 @@ def create_image():
 create_image()
 ```
 
+For example, a flow run named `space-orangutan` prompted a story about "A space orangutan is a species of monkey that live in and..." yielding this image:
+![img-F2JuMSOh1c4rcLlKIVHfTI8B](https://user-images.githubusercontent.com/15331990/211466516-a40713b2-3730-4f77-8b01-b39308e36b97.png)
+
 For more tips on how to use tasks and flows in a Collection, check out [Using Collections](https://orion-docs.prefect.io/collections/usage/)!
 
 ## Resources
