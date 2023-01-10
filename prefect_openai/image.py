@@ -1,14 +1,14 @@
 """Module for generating and configuring OpenAI images."""
+from logging import Logger
 from typing import Any, Dict
-from typing_extensions import Literal
 
 from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
-from prefect.utilities.asyncutils import sync_compatible
-from logging import Logger
 from prefect.exceptions import MissingContextError
 from prefect.logging.loggers import get_logger, get_run_logger
+from prefect.utilities.asyncutils import sync_compatible
 from pydantic import Field
+from typing_extensions import Literal
 
 from prefect_openai import OpenAICredentials
 
@@ -33,9 +33,17 @@ class ImageModel(Block):
     openai_credentials: OpenAICredentials = Field(
         default=..., description="The credentials used to authenticate with OpenAI."
     )
-    size: Literal["256x256", "512x512", "1024x1024"] = Field(default="256x256", description="The size of the image to generate.")
-    n: int = Field(default=1, title="Number of images", description="The number of images to generate.")
-    response_format: Literal["url", "b64_json"] = Field(default="url", description="The format of the image to generate.")
+    size: Literal["256x256", "512x512", "1024x1024"] = Field(
+        default="256x256", description="The size of the image to generate."
+    )
+    n: int = Field(
+        default=1,
+        title="Number of images",
+        description="The number of images to generate.",
+    )
+    response_format: Literal["url", "b64_json"] = Field(
+        default="url", description="The format of the image to generate."
+    )
 
     _block_type_name = "OpenAI Image Model"
     _logo_url = "https://images.ctfassets.net/gm98wzqotmnx/QE8JwcbZBmIfiognXDLcY/2bcd4c759f877d37159f576101218b49/open-ai-logo-8B9BFEDC26-seeklogo.com.png?h=250"  # noqa
@@ -93,7 +101,6 @@ class ImageModel(Block):
         input_kwargs.update(acreate_kwargs)
         creation = await client.Image.acreate(prompt=prompt, **input_kwargs)
         self.logger.info(
-            f"Finished image completion, creating "
-            f"{self.n} {self.size!r} image(s)."
+            f"Finished image completion, creating " f"{self.n} {self.size!r} image(s)."
         )
         return creation
