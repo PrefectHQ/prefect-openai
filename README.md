@@ -46,25 +46,19 @@ A list of available blocks in `prefect-openai` and their setup instructions can 
 
 ```python
 from prefect import flow
-from prefect_openai.tasks import (
-    goodbye_prefect_openai,
-    hello_prefect_openai,
-)
+from prefect_openai import CompletionModel, OpenAICredentials
 
-# Use `with_options` to customize options on any existing task or flow
+@flow(log_prints=True)
+def my_ai_bot(model_name: str = "text-davinci-003")
+    credentials = OpenAICredentials.load("my-openai-creds")
 
-custom_goodbye_prefect_openai = goodbye_prefect_openai.with_options(
-    name="My custom task name",
-    retries=2,
-    retry_delay_seconds=10,
-)
+    completion_model = CompletionModel(
+        openai_credentials=credentials,
+    )
 
-@flow
-def example_flow():
-    hello_prefect_openai
-    custom_goodbye_prefect_openai
-
-example_flow()
+    for prompt in ["hi!", "what is the meaning of life?"]:
+        completion = completion_model.submit_prompt(prompt)
+        print(completion.choices[0].text)
 ```
 
 For more tips on how to use tasks and flows in a Collection, check out [Using Collections](https://orion-docs.prefect.io/collections/usage/)!

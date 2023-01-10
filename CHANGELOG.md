@@ -25,4 +25,4 @@ Released on ????? ?th, 20??.
 
 ### Added
 
-- `task_name` task - [#1](https://github.com/PrefectHQ/prefect-openai/pull/1)
+- `OpenAICredentials` and `CompletionModel` blocks - [#2](https://github.com/PrefectHQ/prefect-openai/pull/2)
