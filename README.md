@@ -44,22 +44,41 @@ A list of available blocks in `prefect-openai` and their setup instructions can 
 
 ### Write and run a flow
 
+Retrieve the flow run name to create a story about it and an image using that story.
+
 ```python
-from prefect import flow
-from prefect_openai import CompletionModel, OpenAICredentials
+from prefect import flow, get_run_logger
+from prefect.context import get_run_context
+from prefect_openai import OpenAICredentials, ImageModel, CompletionModel
 
-@flow(log_prints=True)
-def my_ai_bot(model_name: str = "text-davinci-003")
-    credentials = OpenAICredentials.load("my-openai-creds")
+@flow
+def create_story_and_image_from_flow_run_name():
+    logger = get_run_logger()
+    context = get_run_context()
+    flow_run_name = context.flow_run.name.replace("-", " ")
 
-    completion_model = CompletionModel(
-        openai_credentials=credentials,
+    credentials = OpenAICredentials.load("my-block")
+
+    text_model = CompletionModel(openai_credentials=credentials, model="text-ada-001")
+    text_prompt = f"Story about a {flow_run_name}"
+    text_result = text_model.submit_prompt(text_prompt)
+
+    image_prompt = text_result.choices[0].text.strip()
+    image_model = ImageModel(openai_credentials=credentials)
+    image_result = image_model.submit_prompt(image_prompt)
+    image_url = image_result.data[0]["url"]
+
+    logger.info(
+        f"The story behind the image, {image_prompt!r}, "
+        f"check it out here: {image_url}"
     )
+    return image_url
 
-    for prompt in ["hi!", "what is the meaning of life?"]:
-        completion = completion_model.submit_prompt(prompt)
-        print(completion.choices[0].text)
+create_image()
 ```
+
+For example, a flow run named `space-orangutan` prompted a story about "A space orangutan is a species of monkey that live in and..." yielding this image:
+![img-F2JuMSOh1c4rcLlKIVHfTI8B](https://user-images.githubusercontent.com/15331990/211466516-a40713b2-3730-4f77-8b01-b39308e36b97.png)
 
 For more tips on how to use tasks and flows in a Collection, check out [Using Collections](https://orion-docs.prefect.io/collections/usage/)!
 

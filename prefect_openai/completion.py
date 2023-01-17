@@ -1,8 +1,11 @@
 """Module for generating and configuring OpenAI completions."""
+from logging import Logger
 from typing import Any, Dict, Optional
 
 from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
+from prefect.exceptions import MissingContextError
+from prefect.logging.loggers import get_logger, get_run_logger
 from prefect.utilities.asyncutils import sync_compatible
 from pydantic import Field
 
@@ -49,6 +52,21 @@ class CompletionModel(Block):
 
     _block_type_name = "OpenAI Completion Model"
     _logo_url = "https://images.ctfassets.net/gm98wzqotmnx/QE8JwcbZBmIfiognXDLcY/2bcd4c759f877d37159f576101218b49/open-ai-logo-8B9BFEDC26-seeklogo.com.png?h=250"  # noqa
+
+    @property
+    def logger(self) -> Logger:
+        """
+        Returns a logger based on whether the CompletionModel
+        is called from within a flow or task run context.
+        If a run context is present, the logger property returns a run logger.
+        Else, it returns a default logger labeled with the class's name.
+        Returns:
+            The run logger or a default logger with the class's name.
+        """
+        try:
+            return get_run_logger()
+        except MissingContextError:
+            return get_logger(self.__class__.__name__)
 
     @sync_compatible
     async def submit_prompt(
@@ -101,4 +119,11 @@ class CompletionModel(Block):
         )
         input_kwargs.update(acreate_kwargs)
 
-        return await client.Completion.acreate(prompt=prompt, **input_kwargs)
+        creation = await client.Completion.acreate(prompt=prompt, **input_kwargs)
+        total_tokens = creation.usage["total_tokens"]
+        num_choices = len(creation.choices)
+        self.logger.info(
+            f"Finished text completion using the {self.model!r} "
+            f"model with {total_tokens} tokens, creating {num_choices} choice(s)."
+        )
+        return creation

@@ -26,3 +26,4 @@ Released on ????? ?th, 20??.
 ### Added
 
 - `OpenAICredentials` and `CompletionModel` blocks - [#2](https://github.com/PrefectHQ/prefect-openai/pull/2)
+- `ImageModel` block - [#3](https://github.com/PrefectHQ/prefect-openai/pull/3)
