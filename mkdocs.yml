@@ -66,6 +66,7 @@ nav:
   - Home: index.md
   - Credentials: credentials.md
   - Completion: completion.md
+  - Image: image.md
 
 extra:
   social:
