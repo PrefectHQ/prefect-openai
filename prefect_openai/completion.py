@@ -54,6 +54,7 @@ class CompletionModel(Block):
 
     _block_type_name = "OpenAI Completion Model"
     _logo_url = "https://images.ctfassets.net/gm98wzqotmnx/QE8JwcbZBmIfiognXDLcY/2bcd4c759f877d37159f576101218b49/open-ai-logo-8B9BFEDC26-seeklogo.com.png?h=250"  # noqa
+    _documentation_url = "https://prefecthq.github.io/prefect-openai/completion/#prefect_openai.completion.CompletionModel"  # noqa
 
     @property
     def logger(self) -> Logger:
