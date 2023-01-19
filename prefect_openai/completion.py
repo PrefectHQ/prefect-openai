@@ -15,6 +15,8 @@ from prefect_openai import OpenAICredentials
 class CompletionModel(Block):
     """
     A block that contains config for an OpenAI Completion Model.
+    Learn more in the [OpenAPI Text Completion docs](
+        https://beta.openai.com/docs/guides/completion)
 
     Attributes:
         openai_credentials: The credentials used to authenticate with OpenAI.

@@ -64,9 +64,12 @@ watch:
 
 nav:
   - Home: index.md
-  - Credentials: credentials.md
-  - Completion: completion.md
-  - Image: image.md
+  - Blocks Catalog: blocks_catalog.md
+  - Examples Catalog: examples_catalog.md
+  - API Reference:
+    - Credentials: credentials.md
+    - Completion: completion.md
+    - Image: image.md
 
 extra:
   social:

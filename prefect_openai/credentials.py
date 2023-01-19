@@ -1,4 +1,4 @@
-"""This is an example blocks module"""
+"""Module for authenticating with OpenAI."""
 
 from types import ModuleType
 
