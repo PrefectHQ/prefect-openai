@@ -130,12 +130,8 @@ def create_story_and_image_from_flow_run_name() -> str:
 create_story_and_image_from_flow_run_name()
 ```
 
-Story:
-Once upon a time, there was a copper vulture who lived in a tree. He was very happy and loved to fly around. One day, a dragon came by and saw the vulture. The dragon was very interested in the vulture and wanted to eat him. The vulture flew away, but the dragon followed him. The vulture flew into a cave and the dragon followed him in. The vulture flew up a tree and the dragon followed him up. The vulture flew out of the cave and the dragon followed him. The vulture flew into a river and the dragon followed him. The vulture flew over a waterfall and the dragon followed him. The vulture flew back to his tree and the dragon followed him. The vulture flew away and the dragon flew back home.
+Visit [Flow Run Name Art](flow_run_name_art) to see some example output!
 
-Image:
-
-```
 ## Resources
 
 For more tips on how to use tasks and flows in a Collection, check out [Using Collections](https://orion-docs.prefect.io/collections/usage/)!
