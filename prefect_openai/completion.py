@@ -1,7 +1,6 @@
 """Module for generating and configuring OpenAI completions."""
 from logging import Logger
 from typing import Any, Dict, Optional, Union
-from typing_extensions import Literal
 
 from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
@@ -9,6 +8,7 @@ from prefect.exceptions import MissingContextError
 from prefect.logging.loggers import get_logger, get_run_logger
 from prefect.utilities.asyncutils import sync_compatible
 from pydantic import Field
+from typing_extensions import Literal
 
 from prefect_openai import OpenAICredentials
 
