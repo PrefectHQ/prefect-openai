@@ -18,7 +18,7 @@
 
 Visit the full docs [here](https://PrefectHQ.github.io/prefect-openai) to see additional examples and the API reference.
 
-The prefect-dask collection makes it easy to include AI in your flows. Check out the examples below to get started!
+The prefect-openai collection makes it easy to leverage the capabilities of AI in your flows. Check out the examples below to get started!
 
 ## Summarize tracebacks with GPT3
 
@@ -30,7 +30,7 @@ To streamline this process, we could add AI to the mix, to help parse through th
 
 That way, the developer can more quickly understand what went wrong and implement a fix.
 
-After installing `prefect-openai`, you can easily incorporate OpenAI within your flows to help you achieve the aforementioned!
+After installing `prefect-openai`, you can easily incorporate OpenAI within your flows to help you achieve the aforementioned benefits!
 
 ```python
 from prefect import flow, get_run_logger
@@ -69,7 +69,7 @@ This error is caused by the missing argument traceback. The function expects a t
 12:29:32.302 | INFO    | Flow run 'analytic-starling' - Finished in state Completed()
 ```
 
-Notice how the original traceback was kind of long, and a tad confusing, while the Curie GPT3 model summarized the issue eloquently: `This error is caused by the missing argument traceback. The function expects a traceback object as its first argument, but received nothing.`
+Notice how the original traceback was quite long and confusing, while the Curie GPT3 model summarized the issue eloquently: `This error is caused by the missing argument traceback. The function expects a traceback object as its first argument but receives nothing.`
 
 ## Discover the story behind the flow run name with GPT3 and DALL-E
 
