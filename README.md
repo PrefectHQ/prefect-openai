@@ -1,6 +1,4 @@
-# prefect-openai
-
-Visit the full docs [here](https://PrefectHQ.github.io/prefect-openai) to see additional examples and the API reference.
+# Coordinate and use AI in your dataflow with `prefect-openai`
 
 <p align="center">
     <a href="https://pypi.python.org/pypi/prefect-openai/" alt="PyPI version">
@@ -18,31 +16,62 @@ Visit the full docs [here](https://PrefectHQ.github.io/prefect-openai) to see ad
         <img src="https://img.shields.io/badge/discourse-browse_forum-red.svg?color=0052FF&labelColor=090422&logo=discourse" /></a>
 </p>
 
-## Welcome!
+Visit the full docs [here](https://PrefectHQ.github.io/prefect-openai) to see additional examples and the API reference.
 
-Prefect integrations for working with OpenAI.
+The prefect-dask collection makes it easy to include AI in your flows. Check out the examples below to get started!
 
-## Getting Started
+## Summarize tracebacks with GPT3
 
-### Python setup
+Tracebacks--it's quintessential in programming. They are a record of every line of code leading to the error, to help us, humans, determine what's wrong with the program and find a solution.
 
-Requires an installation of Python 3.7+.
+However, tracebacks can be extraordinarily complex, making them tedious and difficult to troubleshoot, especially for someone new to the codebase.
 
-We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.
+To streamline this process, we could add AI to the mix, to help parse through the traceback and offer a more human-readable summary of the issue.
 
-These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the [Prefect documentation](https://orion-docs.prefect.io/).
+That way, the developer can more quickly understand what went wrong and implement a fix.
 
-### Installation
+After installing `prefect-openai`, you can easily incorporate OpenAI within your flows to help you achieve the aforementioned!
 
-Install `prefect-openai` with `pip`:
+```python
+from prefect import flow, get_run_logger
+from prefect_openai import OpenAICredentials, CompletionModel
 
-```bash
-pip install prefect-openai
+
+@flow
+def summarize_traceback(traceback: str) -> str:
+    logger = get_run_logger()
+    openai_credentials = OpenAICredentials.load("openai-credentials")
+    completion_model = CompletionModel(
+        openai_credentials=openai_credentials,
+        model="text-curie-001",
+        max_tokens=512,
+    )
+    prompt = f"Summarize cause of error from this traceback: ```{traceback}```"
+    summary = completion_model.submit_prompt(traceback).choices[0]["text"]
+    logger.info(f"Summary of the traceback: {summary}")
+    return summary
+
+
+if __name__ == "__main__":
+    traceback = """
+        ParameterBindError: Error binding parameters for function 'summarize_traceback': missing a required argument: 'traceback'.
+        Function 'summarize_traceback' has signature 'traceback: str) -> str' but received args: () and kwargs: {}.
+    """
+    summarize_traceback(traceback)
 ```
 
-A list of available blocks in `prefect-openai` and their setup instructions can be found [here](https://PrefectHQ.github.io/prefect-openai/#blocks-catalog).
+This outputs:
+```bash
+12:29:30.297 | INFO    | prefect.engine - Created flow run 'analytic-starling' for flow 'summarize-traceback'
+12:29:32.085 | INFO    | Flow run 'analytic-starling' - Finished text completion using the 'text-curie-001' model with 113 tokens, creating 1 choice(s).
+12:29:32.089 | INFO    | Flow run 'analytic-starling' - Summary of the traceback:     
+This error is caused by the missing argument traceback. The function expects a traceback object as its first argument, but received nothing.
+12:29:32.302 | INFO    | Flow run 'analytic-starling' - Finished in state Completed()
+```
 
-### Write and run a flow
+Notice how the original traceback was kind of long, and a tad confusing, while the Curie GPT3 model summarized the issue eloquently: `This error is caused by the missing argument traceback. The function expects a traceback object as its first argument, but received nothing.`
+
+## Discover the story behind the flow run name with GPT3 and DALL-E
 
 Retrieve the flow run name to create a story about it and an image using that story.
 
@@ -84,13 +113,29 @@ For more tips on how to use tasks and flows in a Collection, check out [Using Co
 
 ## Resources
 
+### Installation
+
+Install `prefect-openai` with `pip`:
+
+```bash
+pip install prefect-openai
+```
+
+Requires an installation of Python 3.7+.
+
+We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.
+
+These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the [Prefect documentation](https://orion-docs.prefect.io/).
+
+### Feedback
+
 If you encounter any bugs while using `prefect-openai`, feel free to open an issue in the [prefect-openai](https://github.com/PrefectHQ/prefect-openai) repository.
 
 If you have any questions or issues while using `prefect-openai`, you can find help in either the [Prefect Discourse forum](https://discourse.prefect.io/) or the [Prefect Slack community](https://prefect.io/slack).
 
 Feel free to star or watch [`prefect-openai`](https://github.com/PrefectHQ/prefect-openai) for updates too!
 
-## Contributing
+### Contributing
 
 If you'd like to help contribute to fix an issue or add a feature to `prefect-openai`, please [propose changes through a pull request from a fork of the repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
 
