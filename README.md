@@ -24,11 +24,9 @@ The prefect-openai collection makes it easy to leverage the capabilities of AI i
 
 Tracebacks--it's quintessential in programming. They are a record of every line of code leading to the error, to help us, humans, determine what's wrong with the program and find a solution.
 
-However, tracebacks can be extraordinarily complex, making them tedious and difficult to troubleshoot, especially for someone new to the codebase.
+However, tracebacks can be extraordinarily complex, especially for someone new to the codebase.
 
-To streamline this process, we could add AI to the mix, to help parse through the traceback and offer a more human-readable summary of the issue.
-
-That way, the developer can more quickly understand what went wrong and implement a fix.
+To streamline this process, we could add AI to the mix, to offer a more human-readable summary of the issue, so it's easier for the developer to understand what went wrong and implement a fix.
 
 After installing `prefect-openai`, you can easily incorporate OpenAI within your flows to help you achieve the aforementioned benefits!
 
@@ -60,13 +58,12 @@ if __name__ == "__main__":
     summarize_traceback(traceback)
 ```
 
-This outputs:
-```bash hl_lines="7"
-12:29:30.297 | INFO    | prefect.engine - Created flow run 'analytic-starling' for flow 'summarize-traceback'
+```bash hl_lines="4"
+...
 12:29:32.085 | INFO    | Flow run 'analytic-starling' - Finished text completion using the 'text-curie-001' model with 113 tokens, creating 1 choice(s).
 12:29:32.089 | INFO    | Flow run 'analytic-starling' - Summary of the traceback:     
 This error is caused by the missing argument traceback. The function expects a traceback object as its first argument, but received nothing.
-12:29:32.302 | INFO    | Flow run 'analytic-starling' - Finished in state Completed()
+...
 ```
 Notice how the original traceback was quite long and confusing.
 
@@ -127,6 +124,28 @@ Requires an installation of Python 3.7+.
 We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.
 
 These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the [Prefect documentation](https://orion-docs.prefect.io/).
+
+### Saving and loading an OpenAI key
+
+It's easy to set up a `OpenAICredentials` block!
+
+1. Head over to https://beta.openai.com/account/api-keys
+2. Login to your OpenAI account
+3. Click "+ Create new secret key"
+4. Copy the generated API key
+5. Create a short script, replacing the placeholders (or do so in the UI)
+
+```python
+from prefect_openai import OpenAICredentials`
+OpenAICredentials(api_key="API_KEY_PLACEHOLDER").save("BLOCK_NAME_PLACEHOLDER")
+```
+
+Congrats! You can now easily load the saved block, which holds your OpenAI API key:
+
+```python
+from prefect_openai import OpenAICredentials
+OpenAICredentials.load("BLOCK_NAME_PLACEHOLDER")
+```
 
 ### Feedback
 
