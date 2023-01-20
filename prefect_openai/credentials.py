@@ -1,6 +1,7 @@
 """This is an example blocks module"""
 
 from types import ModuleType
+from typing import Optional
 
 import openai
 from prefect.blocks.abstract import CredentialsBlock
@@ -32,6 +33,12 @@ class OpenAICredentials(CredentialsBlock):
         description="The API key used to authenticate with OpenAI.",
     )
 
+    organization: Optional[str] = Field(
+        default=None,
+        title="Organization",
+        description="The organization to use for the OpenAI API.",
+    )
+
     def get_client(self) -> ModuleType:
         """
         Gets the OpenAPI client.
@@ -40,4 +47,5 @@ class OpenAICredentials(CredentialsBlock):
             The OpenAPI client.
         """
         openai.api_key = self.api_key.get_secret_value()
+        openai.organization = self.organization
         return openai
