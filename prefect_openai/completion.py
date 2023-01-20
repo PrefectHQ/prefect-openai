@@ -1,6 +1,7 @@
 """Module for generating and configuring OpenAI completions."""
 from logging import Logger
-from typing import Any, Dict, Literal, Optional, Union
+from typing import Any, Dict, Optional, Union
+from typing_extensions import Literal
 
 from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
