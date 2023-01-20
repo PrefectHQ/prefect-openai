@@ -16,6 +16,8 @@ from prefect_openai import OpenAICredentials
 class ImageModel(Block):
     """
     A block that contains config for an OpenAI Image Model.
+    Learn more in the [OpenAPI Image generation docs](
+        https://beta.openai.com/docs/guides/images)
 
     Attributes:
         openai_credentials: The credentials used to authenticate with OpenAI.
