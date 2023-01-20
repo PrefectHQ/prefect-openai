@@ -42,6 +42,28 @@ pip install prefect-openai
 
 A list of available blocks in `prefect-openai` and their setup instructions can be found [here](https://PrefectHQ.github.io/prefect-openai/#blocks-catalog).
 
+### Saving an OpenAI key in the OpenAICredentials block
+
+It's easy to set up a `OpenAICredentials` block!
+
+1. Head over to https://beta.openai.com/account/api-keys
+2. Login to your OpenAI account
+3. Click "+ Create new secret key"
+4. Copy the generated API key
+5. Create a short script, replacing the placeholders
+
+```python
+from prefect_openai import OpenAICredentials`
+OpenAICredentials(api_key="API_KEY_PLACEHOLDER").save("BLOCK_NAME_PLACEHOLDER")
+```
+
+Congrats! You can now easily load the saved block, which holds your OpenAI API key:
+
+```python
+from prefect_openai import OpenAICredentials
+OpenAICredentials.load("BLOCK_NAME_PLACEHOLDER")
+```
+
 ### Write and run a flow
 
 Retrieve the flow run name to create a story about it and an image using that story.

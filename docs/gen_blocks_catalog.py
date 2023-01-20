@@ -1,6 +1,6 @@
 """
-Copies README.md to index.md. Also discovers all blocks and
-generates a list of them in the docs under the Blocks Catalog heading.
+Discovers all blocks and generates a list of them in the docs
+under the Blocks Catalog heading.
 """
 
 from pathlib import Path
@@ -35,7 +35,6 @@ def insert_blocks_catalog(generated_file):
     module_blocks = find_module_blocks()
     if len(module_blocks) == 0:
         return
-    generated_file.write("## Blocks Catalog\n")
     generated_file.write(
         dedent(
             f"""
@@ -59,40 +58,32 @@ def insert_blocks_catalog(generated_file):
     for module_nesting, block_names in module_blocks.items():
         module_path = " ".join(module_nesting)
         module_title = module_path.replace("_", " ").title()
-        generated_file.write(f"### {module_title} Module\n")
+        generated_file.write(
+            f"## [{module_title} Module][{COLLECTION_SLUG}.{module_path}]\n"
+        )
         for block_name in block_names:
             generated_file.write(
-                f"- **[{block_name}][{COLLECTION_SLUG}.{module_path}.{block_name}]**\n"
+                f"[{block_name}][{COLLECTION_SLUG}.{module_path}.{block_name}]\n"
             )
-        generated_file.write(
-            dedent(
-                f"""
-                To load the {block_name}:
-                ```python
-                from prefect import flow
-                from {COLLECTION_SLUG}.{module_path} import {block_name}
+            generated_file.write(
+                dedent(
+                    f"""
+                    To load the {block_name}:
+                    ```python
+                    from prefect import flow
+                    from {COLLECTION_SLUG}.{module_path} import {block_name}
 
-                @flow
-                def my_flow():
-                    my_block = {block_name}.load("MY_BLOCK_NAME")
+                    @flow
+                    def my_flow():
+                        my_block = {block_name}.load("MY_BLOCK_NAME")
 
-                my_flow()
-                ```
-                """
+                    my_flow()
+                    ```
+                    """
+                )
             )
-        )
 
 
-readme_path = Path("README.md")
-docs_index_path = Path("index.md")
-
-with open(readme_path, "r") as readme:
-    with mkdocs_gen_files.open(docs_index_path, "w") as generated_file:
-        for line in readme:
-            if line.startswith("Visit the full docs [here]("):
-                continue  # prevent linking to itself
-            if line.startswith("## Resources"):
-                insert_blocks_catalog(generated_file)
-            generated_file.write(line)
-
-    mkdocs_gen_files.set_edit_path(Path(docs_index_path), readme_path)
+blocks_catalog_path = Path("blocks_catalog.md")
+with mkdocs_gen_files.open(blocks_catalog_path, "w") as generated_file:
+    insert_blocks_catalog(generated_file)
