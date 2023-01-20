@@ -69,7 +69,9 @@ This error is caused by the missing argument traceback. The function expects a t
 12:29:32.302 | INFO    | Flow run 'analytic-starling' - Finished in state Completed()
 ```
 
-Notice how the original traceback was kind of long, and a tad confusing, while the Curie GPT3 model summarized the issue eloquently: `This error is caused by the missing argument traceback. The function expects a traceback object as its first argument, but received nothing.`
+Notice how the original traceback was kind of long, and a tad confusing.
+
+On the flip side, the Curie GPT3 model summarized the issue eloquently: `This error is caused by the missing argument traceback. The function expects a traceback object as its first argument, but received nothing.`
 
 ## Discover the story behind the flow run name with GPT3 and DALL-E
 
