@@ -1,6 +1,6 @@
 """Module for generating and configuring OpenAI completions."""
 from logging import Logger
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Literal, Optional, Union
 
 from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
@@ -19,10 +19,16 @@ class CompletionModel(Block):
     Attributes:
         openai_credentials: The credentials used to authenticate with OpenAI.
         model: ID of the model to use.
-        temperature: The temperature of the model.
-        max_tokens: The maximum number of tokens to generate.
+        temperature: What sampling temperature to use.
+            Higher values means the model will take more risks.
+            Try 0.9 for more creative applications, and 0 (argmax sampling)
+            for ones with a well-defined answer.
+        max_tokens: The maximum number of tokens to generate in the completion.
+            The token count of your prompt plus max_tokens cannot exceed the
+            model's context length. Most models have a context length of 2048 tokens
+            (except for the newest models, which support 4096).
         suffix: The suffix to append to the prompt.
-        echo: Whether to echo the prompt.
+        echo: Echo back the prompt in addition to the completion.
         timeout: The maximum time to wait for the model to warm up.
 
     Example:
@@ -37,10 +43,28 @@ class CompletionModel(Block):
     openai_credentials: OpenAICredentials = Field(
         default=..., description="The credentials used to authenticate with OpenAI."
     )
-    model: str = Field(default="text-curie-001", description="ID of the model to use.")
-    temperature: float = Field(default=0.5, description="The temperature of the model.")
+    model: Union[
+        Literal[
+            "text-davinci-003", "text-curie-001", "text-babbage-001", "text-ada-001"
+        ],
+        str,
+    ] = Field(default="text-curie-001", description="ID of the model to use.")
+    temperature: float = Field(
+        default=0.5,
+        description=(
+            "What sampling temperature to use. Higher values means the model will take "
+            "more risks. Try 0.9 for more creative applications, and 0 "
+            "(argmax sampling) for ones with a well-defined answer."
+        ),
+    )
     max_tokens: int = Field(
-        default=16, description="The maximum number of tokens to generate."
+        default=16,
+        description=(
+            "The maximum number of tokens to generate in the completion. "
+            "The token count of your prompt plus max_tokens cannot exceed the "
+            "model's context length. Most models have a context length of 2048 tokens "
+            "(except for the newest models, which support 4096)."
+        ),
     )
     suffix: Optional[str] = Field(
         default=None, description="The suffix to append to the prompt."
