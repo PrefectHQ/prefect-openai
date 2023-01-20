@@ -36,7 +36,7 @@ class OpenAICredentials(CredentialsBlock):
     organization: Optional[str] = Field(
         default=None,
         title="Organization",
-        description="The organization to use for the OpenAI API.",
+        description="Specify which organization is used for an API request.",
     )
 
     def get_client(self) -> ModuleType:
