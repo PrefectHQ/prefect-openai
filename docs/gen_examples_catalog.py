@@ -22,7 +22,12 @@ import prefect_openai
 COLLECTION_SLUG = "prefect_openai"
 
 
-def skip_parsing(name, obj, module_nesting):
+def skip_parsing(name: str, obj: Union[ModuleType, Callable], module_nesting: str):
+    """
+    Skips parsing the object if it's a private object or if it's not in the
+    module nesting, preventing imports from other libraries from being added to the
+    examples catalog.
+    """
     try:
         wrong_module = not to_qualified_name(obj).startswith(module_nesting)
     except AttributeError:
