@@ -17,7 +17,7 @@
         <link rel="next" href="../image/">
       
       <link rel="icon" href="../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
     
     
       
@@ -261,8 +261,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../credentials/" class="md-nav__link">
-        Credentials
+      <a href="../blocks_catalog/" class="md-nav__link">
+        Blocks Catalog
       </a>
     </li>
   
@@ -272,6 +272,79 @@
       
       
 
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples_catalog/" class="md-nav__link">
+        Examples Catalog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flow_run_name_art/" class="md-nav__link">
+        Flow Run Name Art
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="true">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../credentials/" class="md-nav__link">
+        Credentials
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
   
   
     
@@ -382,11 +455,10 @@
     </li>
   
 
-    
-      
-      
-      
-
+            
+          
+            
+              
   
   
   
@@ -394,6 +466,13 @@
       <a href="../image/" class="md-nav__link">
         Image
       </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -550,7 +629,8 @@
         Bases: <code><span title="prefect.blocks.core.Block">Block</span></code></p>
 
   
-      <p>A block that contains config for an OpenAI Completion Model.</p>
+      <p>A block that contains config for an OpenAI Completion Model.
+Learn more in the <a href="https://beta.openai.com/docs/guides/completion">OpenAPI Text Completion docs</a></p>
 
   <p><strong>Attributes:</strong></p>
   <table>
@@ -572,7 +652,7 @@
         <tr>
           <td><code>model</code></td>
           <td>
-                <code>str</code>
+                <code><span title="typing.Union">Union</span>[<span title="typing_extensions.Literal">Literal</span>[text-davinci-003, text-curie-001, text-babbage-001, text-ada-001], str]</code>
           </td>
           <td><p>ID of the model to use.</p></td>
         </tr>
@@ -581,14 +661,20 @@
           <td>
                 <code>float</code>
           </td>
-          <td><p>The temperature of the model.</p></td>
+          <td><p>What sampling temperature to use.
+Higher values means the model will take more risks.
+Try 0.9 for more creative applications, and 0 (argmax sampling)
+for ones with a well-defined answer.</p></td>
         </tr>
         <tr>
           <td><code>max_tokens</code></td>
           <td>
                 <code>int</code>
           </td>
-          <td><p>The maximum number of tokens to generate.</p></td>
+          <td><p>The maximum number of tokens to generate in the completion.
+The token count of your prompt plus max_tokens cannot exceed the
+model's context length. Most models have a context length of 2048 tokens
+(except for the newest models, which support 4096).</p></td>
         </tr>
         <tr>
           <td><code>suffix</code></td>
@@ -602,7 +688,7 @@
           <td>
                 <code>bool</code>
           </td>
-          <td><p>Whether to echo the prompt.</p></td>
+          <td><p>Echo back the prompt in addition to the completion.</p></td>
         </tr>
         <tr>
           <td><code>timeout</code></td>
@@ -625,8 +711,7 @@
 
         <details class="quote">
           <summary>Source code in <code>prefect_openai/completion.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 15</span>
-<span class="normal"> 16</span>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 16</span>
 <span class="normal"> 17</span>
 <span class="normal"> 18</span>
 <span class="normal"> 19</span>
@@ -739,17 +824,53 @@
 <span class="normal">126</span>
 <span class="normal">127</span>
 <span class="normal">128</span>
-<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CompletionModel</span><span class="p">(</span><span class="n">Block</span><span class="p">):</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CompletionModel</span><span class="p">(</span><span class="n">Block</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A block that contains config for an OpenAI Completion Model.</span>
+<span class="sd">    Learn more in the [OpenAPI Text Completion docs](</span>
+<span class="sd">        https://beta.openai.com/docs/guides/completion)</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        openai_credentials: The credentials used to authenticate with OpenAI.</span>
 <span class="sd">        model: ID of the model to use.</span>
-<span class="sd">        temperature: The temperature of the model.</span>
-<span class="sd">        max_tokens: The maximum number of tokens to generate.</span>
+<span class="sd">        temperature: What sampling temperature to use.</span>
+<span class="sd">            Higher values means the model will take more risks.</span>
+<span class="sd">            Try 0.9 for more creative applications, and 0 (argmax sampling)</span>
+<span class="sd">            for ones with a well-defined answer.</span>
+<span class="sd">        max_tokens: The maximum number of tokens to generate in the completion.</span>
+<span class="sd">            The token count of your prompt plus max_tokens cannot exceed the</span>
+<span class="sd">            model&#39;s context length. Most models have a context length of 2048 tokens</span>
+<span class="sd">            (except for the newest models, which support 4096).</span>
 <span class="sd">        suffix: The suffix to append to the prompt.</span>
-<span class="sd">        echo: Whether to echo the prompt.</span>
+<span class="sd">        echo: Echo back the prompt in addition to the completion.</span>
 <span class="sd">        timeout: The maximum time to wait for the model to warm up.</span>
 
 <span class="sd">    Example:</span>
@@ -764,10 +885,28 @@
     <span class="n">openai_credentials</span><span class="p">:</span> <span class="n">OpenAICredentials</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The credentials used to authenticate with OpenAI.&quot;</span>
     <span class="p">)</span>
-    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;text-curie-001&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;ID of the model to use.&quot;</span><span class="p">)</span>
-    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The temperature of the model.&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">Literal</span><span class="p">[</span>
+            <span class="s2">&quot;text-davinci-003&quot;</span><span class="p">,</span> <span class="s2">&quot;text-curie-001&quot;</span><span class="p">,</span> <span class="s2">&quot;text-babbage-001&quot;</span><span class="p">,</span> <span class="s2">&quot;text-ada-001&quot;</span>
+        <span class="p">],</span>
+        <span class="nb">str</span><span class="p">,</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;text-curie-001&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;ID of the model to use.&quot;</span><span class="p">)</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;What sampling temperature to use. Higher values means the model will take &quot;</span>
+            <span class="s2">&quot;more risks. Try 0.9 for more creative applications, and 0 &quot;</span>
+            <span class="s2">&quot;(argmax sampling) for ones with a well-defined answer.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
     <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The maximum number of tokens to generate.&quot;</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;The maximum number of tokens to generate in the completion. &quot;</span>
+            <span class="s2">&quot;The token count of your prompt plus max_tokens cannot exceed the &quot;</span>
+            <span class="s2">&quot;model&#39;s context length. Most models have a context length of 2048 tokens &quot;</span>
+            <span class="s2">&quot;(except for the newest models, which support 4096).&quot;</span>
+        <span class="p">),</span>
     <span class="p">)</span>
     <span class="n">suffix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The suffix to append to the prompt.&quot;</span>
@@ -779,6 +918,7 @@
 
     <span class="n">_block_type_name</span> <span class="o">=</span> <span class="s2">&quot;OpenAI Completion Model&quot;</span>
     <span class="n">_logo_url</span> <span class="o">=</span> <span class="s2">&quot;https://images.ctfassets.net/gm98wzqotmnx/QE8JwcbZBmIfiognXDLcY/2bcd4c759f877d37159f576101218b49/open-ai-logo-8B9BFEDC26-seeklogo.com.png?h=250&quot;</span>  <span class="c1"># noqa</span>
+    <span class="n">_documentation_url</span> <span class="o">=</span> <span class="s2">&quot;https://prefecthq.github.io/prefect-openai/completion/#prefect_openai.completion.CompletionModel&quot;</span>  <span class="c1"># noqa</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">logger</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Logger</span><span class="p">:</span>
@@ -1006,35 +1146,7 @@ to <a href="https://beta.openai.com/docs/api-reference/completions/create"><code
 </details>
       <details class="quote">
         <summary>Source code in <code>prefect_openai/completion.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
@@ -1064,7 +1176,35 @@ to <a href="https://beta.openai.com/docs/api-reference/completions/create"><code
 <span class="normal">126</span>
 <span class="normal">127</span>
 <span class="normal">128</span>
-<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@sync_compatible</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@sync_compatible</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">submit_prompt</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">acreate_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OpenAIObject</span><span class="p">:</span>
@@ -1267,7 +1407,7 @@ to <a href="https://beta.openai.com/docs/api-reference/completions/create"><code
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>

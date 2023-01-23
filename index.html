@@ -12,10 +12,10 @@
       
       
       
-        <link rel="next" href="credentials/">
+        <link rel="next" href="blocks_catalog/">
       
       <link rel="icon" href="img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
     
     
       
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#prefect-openai" class="md-skip">
+        <a href="#coordinate-and-use-ai-in-your-dataflow-with-prefect-openai" class="md-skip">
           Skip to content
         </a>
       
@@ -278,26 +278,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#welcome" class="md-nav__link">
-    Welcome!
+  <a href="#summarize-tracebacks-with-gpt3" class="md-nav__link">
+    Summarize tracebacks with GPT3
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    Getting Started
-  </a>
-  
-    <nav class="md-nav" aria-label="Getting Started">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#python-setup" class="md-nav__link">
-    Python setup
+  <a href="#create-a-story-around-a-flow-run-name-with-gpt3-and-dall-e" class="md-nav__link">
+    Create a story around a flow run name with GPT3 and DALL-E
   </a>
   
 </li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    Resources
+  </a>
+  
+    <nav class="md-nav" aria-label="Resources">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
@@ -307,62 +307,28 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#write-and-run-a-flow" class="md-nav__link">
-    Write and run a flow
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#blocks-catalog" class="md-nav__link">
-    Blocks Catalog
-  </a>
-  
-    <nav class="md-nav" aria-label="Blocks Catalog">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#credentials-module" class="md-nav__link">
-    Credentials Module
+  <a href="#saving-an-openai-key" class="md-nav__link">
+    Saving an OpenAI key
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#completion-module" class="md-nav__link">
-    Completion Module
+  <a href="#feedback" class="md-nav__link">
+    Feedback
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#image-module" class="md-nav__link">
-    Image Module
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#resources" class="md-nav__link">
-    Resources
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#contributing" class="md-nav__link">
     Contributing
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -382,8 +348,8 @@
   
   
     <li class="md-nav__item">
-      <a href="credentials/" class="md-nav__link">
-        Credentials
+      <a href="blocks_catalog/" class="md-nav__link">
+        Blocks Catalog
       </a>
     </li>
   
@@ -393,6 +359,77 @@
       
       
 
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="examples_catalog/" class="md-nav__link">
+        Examples Catalog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="flow_run_name_art/" class="md-nav__link">
+        Flow Run Name Art
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="credentials/" class="md-nav__link">
+        Credentials
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
   
   
   
@@ -403,11 +440,10 @@
     </li>
   
 
-    
-      
-      
-      
-
+            
+          
+            
+              
   
   
   
@@ -415,6 +451,13 @@
       <a href="image/" class="md-nav__link">
         Image
       </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -446,26 +489,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#welcome" class="md-nav__link">
-    Welcome!
+  <a href="#summarize-tracebacks-with-gpt3" class="md-nav__link">
+    Summarize tracebacks with GPT3
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    Getting Started
-  </a>
-  
-    <nav class="md-nav" aria-label="Getting Started">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#python-setup" class="md-nav__link">
-    Python setup
+  <a href="#create-a-story-around-a-flow-run-name-with-gpt3-and-dall-e" class="md-nav__link">
+    Create a story around a flow run name with GPT3 and DALL-E
   </a>
   
 </li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    Resources
+  </a>
+  
+    <nav class="md-nav" aria-label="Resources">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
@@ -475,62 +518,28 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#write-and-run-a-flow" class="md-nav__link">
-    Write and run a flow
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#blocks-catalog" class="md-nav__link">
-    Blocks Catalog
-  </a>
-  
-    <nav class="md-nav" aria-label="Blocks Catalog">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#credentials-module" class="md-nav__link">
-    Credentials Module
+  <a href="#saving-an-openai-key" class="md-nav__link">
+    Saving an OpenAI key
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#completion-module" class="md-nav__link">
-    Completion Module
+  <a href="#feedback" class="md-nav__link">
+    Feedback
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#image-module" class="md-nav__link">
-    Image Module
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#resources" class="md-nav__link">
-    Resources
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#contributing" class="md-nav__link">
     Contributing
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -553,8 +562,10 @@
 
 
 
-<h1 id="prefect-openai">prefect-openai</h1>
+<h1 id="coordinate-and-use-ai-in-your-dataflow-with-prefect-openai">Coordinate and use AI in your dataflow with <code>prefect-openai</code></h1>
 <p align="center">
+    <img src="https://user-images.githubusercontent.com/15331990/213825004-eedb25b3-0520-4f55-95d3-3a3fc8b235ff.png">
+    <br>
     <a href="https://pypi.python.org/pypi/prefect-openai/" alt="PyPI version">
         <img alt="PyPI" src="https://img.shields.io/pypi/v/prefect-openai?color=0052FF&labelColor=090422"></a>
     <a href="https://github.com/PrefectHQ/prefect-openai/" alt="Stars">
@@ -570,108 +581,132 @@
         <img src="https://img.shields.io/badge/discourse-browse_forum-red.svg?color=0052FF&labelColor=090422&logo=discourse" /></a>
 </p>
 
-<h2 id="welcome">Welcome!</h2>
-<p>Prefect integrations for working with OpenAI.</p>
-<h2 id="getting-started">Getting Started</h2>
-<h3 id="python-setup">Python setup</h3>
-<p>Requires an installation of Python 3.7+.</p>
-<p>We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.</p>
-<p>These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the <a href="https://orion-docs.prefect.io/">Prefect documentation</a>.</p>
+<p>The <code>prefect-openai</code> collection makes it easy to leverage the capabilities of AI in your flows. Check out the examples below to get started!</p>
+<h2 id="summarize-tracebacks-with-gpt3">Summarize tracebacks with GPT3</h2>
+<p>Tracebacks--it's quintessential in programming. They are a record of every line of code leading to the error, to help us, humans, determine what's wrong with the program and find a solution.</p>
+<p>However, tracebacks can be extraordinarily complex, especially for someone new to the codebase.</p>
+<p>To streamline this process, we could add AI to the mix, to offer a more human-readable summary of the issue, so it's easier for the developer to understand what went wrong and implement a fix.</p>
+<p>After installing <code>prefect-openai</code> and <a href="#saving-an-openai-key">saving an OpenAI key</a>, you can easily incorporate OpenAI within your flows to help you achieve the aforementioned benefits!</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span><span class="p">,</span> <span class="n">get_run_logger</span>
+<span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span><span class="p">,</span> <span class="n">CompletionModel</span>
+
+
+<span class="nd">@flow</span>
+<span class="k">def</span> <span class="nf">summarize_traceback</span><span class="p">(</span><span class="n">traceback</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">get_run_logger</span><span class="p">()</span>
+    <span class="n">openai_credentials</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;openai-credentials&quot;</span><span class="p">)</span>
+    <span class="n">completion_model</span> <span class="o">=</span> <span class="n">CompletionModel</span><span class="p">(</span>
+        <span class="n">openai_credentials</span><span class="o">=</span><span class="n">openai_credentials</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;text-curie-001&quot;</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Summarize cause of error from this traceback: ```</span><span class="si">{</span><span class="n">traceback</span><span class="si">}</span><span class="s2">```&quot;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">completion_model</span><span class="o">.</span><span class="n">submit_prompt</span><span class="p">(</span><span class="n">traceback</span><span class="p">)</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Summary of the traceback: </span><span class="si">{</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">summary</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">traceback</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        ParameterBindError: Error binding parameters for function &#39;summarize_traceback&#39;: missing a required argument: &#39;traceback&#39;.</span>
+<span class="s2">        Function &#39;summarize_traceback&#39; has signature &#39;traceback: str) -&gt; str&#39; but received args: () and kwargs: </span><span class="si">{}</span><span class="s2">.</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="n">summarize_traceback</span><span class="p">(</span><span class="n">traceback</span><span class="p">)</span>
+</code></pre></div>
+<p><div class="highlight"><pre><span></span><code>...
+<span class="m">12</span>:29:32.085<span class="w"> </span><span class="p">|</span><span class="w"> </span>INFO<span class="w">    </span><span class="p">|</span><span class="w"> </span>Flow<span class="w"> </span>run<span class="w"> </span><span class="s1">&#39;analytic-starling&#39;</span><span class="w"> </span>-<span class="w"> </span>Finished<span class="w"> </span>text<span class="w"> </span>completion<span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span><span class="s1">&#39;text-curie-001&#39;</span><span class="w"> </span>model<span class="w"> </span>with<span class="w"> </span><span class="m">113</span><span class="w"> </span>tokens,<span class="w"> </span>creating<span class="w"> </span><span class="m">1</span><span class="w"> </span>choice<span class="o">(</span>s<span class="o">)</span>.
+<span class="m">12</span>:29:32.089<span class="w"> </span><span class="p">|</span><span class="w"> </span>INFO<span class="w">    </span><span class="p">|</span><span class="w"> </span>Flow<span class="w"> </span>run<span class="w"> </span><span class="s1">&#39;analytic-starling&#39;</span><span class="w"> </span>-<span class="w"> </span>Summary<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>traceback:<span class="w">     </span>
+<span class="hll">This<span class="w"> </span>error<span class="w"> </span>is<span class="w"> </span>caused<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>missing<span class="w"> </span>argument<span class="w"> </span>traceback.<span class="w"> </span>The<span class="w"> </span><span class="k">function</span><span class="w"> </span>expects<span class="w"> </span>a<span class="w"> </span>traceback<span class="w"> </span>object<span class="w"> </span>as<span class="w"> </span>its<span class="w"> </span>first<span class="w"> </span>argument,<span class="w"> </span>but<span class="w"> </span>received<span class="w"> </span>nothing.
+</span>...
+</code></pre></div>
+Notice how the original traceback was quite long and confusing.</p>
+<p>On the flip side, the Curie GPT3 model was able to summarize the issue eloquently!</p>
+<h2 id="create-a-story-around-a-flow-run-name-with-gpt3-and-dall-e">Create a story around a flow run name with GPT3 and DALL-E</h2>
+<p>Have you marveled at all the AI-generated images and wondered how others did it?</p>
+<p>After installing <code>prefect-openai</code> and <a href="#saving-an-openai-key">saving an OpenAI key</a>, you, too, can create AI-generated art.</p>
+<p>Here's an example on how to create a story and an image based off a flow run name.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">get_run_logger</span>
+<span class="kn">from</span> <span class="nn">prefect.context</span> <span class="kn">import</span> <span class="n">get_run_context</span>
+<span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span><span class="p">,</span> <span class="n">ImageModel</span><span class="p">,</span> <span class="n">CompletionModel</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">create_story_from_name</span><span class="p">(</span><span class="n">credentials</span><span class="p">:</span> <span class="n">OpenAICredentials</span><span class="p">,</span> <span class="n">flow_run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a fun story about the flow run name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text_model</span> <span class="o">=</span> <span class="n">CompletionModel</span><span class="p">(</span>
+        <span class="n">openai_credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;text-curie-001&quot;</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">288</span>
+    <span class="p">)</span>
+    <span class="n">text_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Provide a fun story about a </span><span class="si">{</span><span class="n">flow_run_name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">story</span> <span class="o">=</span> <span class="n">text_model</span><span class="o">.</span><span class="n">submit_prompt</span><span class="p">(</span><span class="n">text_prompt</span><span class="p">)</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">story</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">create_image_from_story</span><span class="p">(</span><span class="n">credentials</span><span class="p">:</span> <span class="n">OpenAICredentials</span><span class="p">,</span> <span class="n">story</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an image associated with the story.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">image_model</span> <span class="o">=</span> <span class="n">ImageModel</span><span class="p">(</span><span class="n">openai_credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;512x512&quot;</span><span class="p">)</span>
+    <span class="n">image_result</span> <span class="o">=</span> <span class="n">image_model</span><span class="o">.</span><span class="n">submit_prompt</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+    <span class="n">image_url</span> <span class="o">=</span> <span class="n">image_result</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">image_url</span>
+
+
+<span class="nd">@flow</span>
+<span class="k">def</span> <span class="nf">create_story_and_image_from_flow_run_name</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the flow run name and create a story and image associated with it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">get_run_context</span><span class="p">()</span>
+    <span class="n">flow_run_name</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">flow_run</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="n">credentials</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;openai-credentials&quot;</span><span class="p">)</span>
+    <span class="n">story</span> <span class="o">=</span> <span class="n">create_story_from_name</span><span class="p">(</span><span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span> <span class="n">flow_run_name</span><span class="o">=</span><span class="n">flow_run_name</span><span class="p">)</span>
+    <span class="n">image_url</span> <span class="o">=</span> <span class="n">create_image_from_story</span><span class="p">(</span><span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span> <span class="n">story</span><span class="o">=</span><span class="n">story</span><span class="p">)</span>
+
+    <span class="n">story_and_image</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;The story about a </span><span class="si">{</span><span class="n">flow_run_name</span><span class="si">}</span><span class="s2">: &#39;</span><span class="si">{</span><span class="n">story</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;And its image: </span><span class="si">{</span><span class="n">image_url</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">story_and_image</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">story_and_image</span>
+
+
+<span class="n">create_story_and_image_from_flow_run_name</span><span class="p">()</span>
+</code></pre></div>
+<p>Visit <a href="flow_run_name_art">Flow Run Name Art</a> to see some example output!</p>
+<h2 id="resources">Resources</h2>
+<p>For more tips on how to use tasks and flows in a Collection, check out <a href="https://orion-docs.prefect.io/collections/usage/">Using Collections</a>!</p>
 <h3 id="installation">Installation</h3>
 <p>Install <code>prefect-openai</code> with <code>pip</code>:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>prefect-openai
 </code></pre></div>
-<p>A list of available blocks in <code>prefect-openai</code> and their setup instructions can be found <a href="https://PrefectHQ.github.io/prefect-openai/#blocks-catalog">here</a>.</p>
-<h3 id="write-and-run-a-flow">Write and run a flow</h3>
-<p>Retrieve the flow run name to create a story about it and an image using that story.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span><span class="p">,</span> <span class="n">get_run_logger</span>
-<span class="kn">from</span> <span class="nn">prefect.context</span> <span class="kn">import</span> <span class="n">get_run_context</span>
-<span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span><span class="p">,</span> <span class="n">ImageModel</span><span class="p">,</span> <span class="n">CompletionModel</span>
-
-<span class="nd">@flow</span>
-<span class="k">def</span> <span class="nf">create_story_and_image_from_flow_run_name</span><span class="p">():</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">get_run_logger</span><span class="p">()</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="n">get_run_context</span><span class="p">()</span>
-    <span class="n">flow_run_name</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">flow_run</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-
-    <span class="n">credentials</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;my-block&quot;</span><span class="p">)</span>
-
-    <span class="n">text_model</span> <span class="o">=</span> <span class="n">CompletionModel</span><span class="p">(</span><span class="n">openai_credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;text-ada-001&quot;</span><span class="p">)</span>
-    <span class="n">text_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Story about a </span><span class="si">{</span><span class="n">flow_run_name</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="n">text_result</span> <span class="o">=</span> <span class="n">text_model</span><span class="o">.</span><span class="n">submit_prompt</span><span class="p">(</span><span class="n">text_prompt</span><span class="p">)</span>
-
-    <span class="n">image_prompt</span> <span class="o">=</span> <span class="n">text_result</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">image_model</span> <span class="o">=</span> <span class="n">ImageModel</span><span class="p">(</span><span class="n">openai_credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
-    <span class="n">image_result</span> <span class="o">=</span> <span class="n">image_model</span><span class="o">.</span><span class="n">submit_prompt</span><span class="p">(</span><span class="n">image_prompt</span><span class="p">)</span>
-    <span class="n">image_url</span> <span class="o">=</span> <span class="n">image_result</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
-
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;The story behind the image, </span><span class="si">{</span><span class="n">image_prompt</span><span class="si">!r}</span><span class="s2">, &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;check it out here: </span><span class="si">{</span><span class="n">image_url</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">image_url</span>
-
-<span class="n">create_image</span><span class="p">()</span>
+<p>Requires an installation of Python 3.7+.</p>
+<p>We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.</p>
+<p>These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the <a href="https://orion-docs.prefect.io/">Prefect documentation</a>.</p>
+<h3 id="saving-an-openai-key">Saving an OpenAI key</h3>
+<p>It's easy to set up an <code>OpenAICredentials</code> block!</p>
+<ol>
+<li>Head over to https://beta.openai.com/account/api-keys</li>
+<li>Login to your OpenAI account</li>
+<li>Click "+ Create new secret key"</li>
+<li>Copy the generated API key</li>
+<li>Create a short script, replacing the placeholders (or do so in the UI)</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span><span class="err">`</span>
+<span class="n">OpenAICredentials</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;API_KEY_PLACEHOLDER&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;BLOCK_NAME_PLACEHOLDER&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>For example, a flow run named <code>space-orangutan</code> prompted a story about "A space orangutan is a species of monkey that live in and..." yielding this image:
-<img alt="img-F2JuMSOh1c4rcLlKIVHfTI8B" src="https://user-images.githubusercontent.com/15331990/211466516-a40713b2-3730-4f77-8b01-b39308e36b97.png" /></p>
-<p>For more tips on how to use tasks and flows in a Collection, check out <a href="https://orion-docs.prefect.io/collections/usage/">Using Collections</a>!</p>
-<h2 id="blocks-catalog">Blocks Catalog</h2>
-<p>Below is a list of Blocks available for registration in
-<code>prefect-openai</code>.</p>
-<p>To register blocks in this module to
-<a href="https://orion-docs.prefect.io/ui/blocks/">view and edit them</a>
-on Prefect Cloud:
-<div class="highlight"><pre><span></span><code>prefect<span class="w"> </span>block<span class="w"> </span>register<span class="w"> </span>-m<span class="w"> </span>prefect_openai
+<p>Congrats! You can now easily load the saved block, which holds your OpenAI API key:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span>
+<span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;BLOCK_NAME_PLACEHOLDER&quot;</span><span class="p">)</span>
 </code></pre></div>
-Note, to use the <code>load</code> method on Blocks, you must already have a block document <a href="https://orion-docs.prefect.io/concepts/blocks/#saving-blocks">saved through code</a> or <a href="https://orion-docs.prefect.io/ui/blocks/">saved through the UI</a>.</p>
-<h3 id="credentials-module">Credentials Module</h3>
-<ul>
-<li><strong><a class="autorefs autorefs-internal" href="credentials/#prefect_openai.credentials.OpenAICredentials">OpenAICredentials</a></strong></li>
-</ul>
-<p>To load the OpenAICredentials:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
-<span class="kn">from</span> <span class="nn">prefect_openai.credentials</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span>
-
-<span class="nd">@flow</span>
-<span class="k">def</span> <span class="nf">my_flow</span><span class="p">():</span>
-    <span class="n">my_block</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
-
-<span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div></p>
-<h3 id="completion-module">Completion Module</h3>
-<ul>
-<li><strong><a class="autorefs autorefs-internal" href="completion/#prefect_openai.completion.CompletionModel">CompletionModel</a></strong></li>
-</ul>
-<p>To load the CompletionModel:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
-<span class="kn">from</span> <span class="nn">prefect_openai.completion</span> <span class="kn">import</span> <span class="n">CompletionModel</span>
-
-<span class="nd">@flow</span>
-<span class="k">def</span> <span class="nf">my_flow</span><span class="p">():</span>
-    <span class="n">my_block</span> <span class="o">=</span> <span class="n">CompletionModel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
-
-<span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div></p>
-<h3 id="image-module">Image Module</h3>
-<ul>
-<li><strong><a class="autorefs autorefs-internal" href="image/#prefect_openai.image.ImageModel">ImageModel</a></strong></li>
-</ul>
-<p>To load the ImageModel:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
-<span class="kn">from</span> <span class="nn">prefect_openai.image</span> <span class="kn">import</span> <span class="n">ImageModel</span>
-
-<span class="nd">@flow</span>
-<span class="k">def</span> <span class="nf">my_flow</span><span class="p">():</span>
-    <span class="n">my_block</span> <span class="o">=</span> <span class="n">ImageModel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
-
-<span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div></p>
-<h2 id="resources">Resources</h2>
+<h3 id="feedback">Feedback</h3>
 <p>If you encounter any bugs while using <code>prefect-openai</code>, feel free to open an issue in the <a href="https://github.com/PrefectHQ/prefect-openai">prefect-openai</a> repository.</p>
 <p>If you have any questions or issues while using <code>prefect-openai</code>, you can find help in either the <a href="https://discourse.prefect.io/">Prefect Discourse forum</a> or the <a href="https://prefect.io/slack">Prefect Slack community</a>.</p>
 <p>Feel free to star or watch <a href="https://github.com/PrefectHQ/prefect-openai"><code>prefect-openai</code></a> for updates too!</p>
-<h2 id="contributing">Contributing</h2>
+<h3 id="contributing">Contributing</h3>
 <p>If you'd like to help contribute to fix an issue or add a feature to <code>prefect-openai</code>, please <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork">propose changes through a pull request from a fork of the repository</a>.</p>
 <p>Here are the steps:</p>
 <ol>
@@ -810,7 +845,7 @@ Note, to use the <code>load</code> method on Blocks, you must already have a blo
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="assets/javascripts/bundle.51d95adb.min.js"></script>

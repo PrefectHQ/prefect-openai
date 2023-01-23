@@ -15,7 +15,7 @@
       
       
       <link rel="icon" href="../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
     
     
       
@@ -259,8 +259,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../credentials/" class="md-nav__link">
-        Credentials
+      <a href="../blocks_catalog/" class="md-nav__link">
+        Blocks Catalog
       </a>
     </li>
   
@@ -274,8 +274,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../completion/" class="md-nav__link">
-        Completion
+      <a href="../examples_catalog/" class="md-nav__link">
+        Examples Catalog
       </a>
     </li>
   
@@ -285,6 +285,78 @@
       
       
 
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flow_run_name_art/" class="md-nav__link">
+        Flow Run Name Art
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="true">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../credentials/" class="md-nav__link">
+        Credentials
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../completion/" class="md-nav__link">
+        Completion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
   
   
     
@@ -392,6 +464,13 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -548,7 +627,8 @@
         Bases: <code><span title="prefect.blocks.core.Block">Block</span></code></p>
 
   
-      <p>A block that contains config for an OpenAI Image Model.</p>
+      <p>A block that contains config for an OpenAI Image Model.
+Learn more in the <a href="https://beta.openai.com/docs/guides/images">OpenAPI Image generation docs</a></p>
 
   <p><strong>Attributes:</strong></p>
   <table>
@@ -694,9 +774,13 @@
 <span class="normal">105</span>
 <span class="normal">106</span>
 <span class="normal">107</span>
-<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ImageModel</span><span class="p">(</span><span class="n">Block</span><span class="p">):</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ImageModel</span><span class="p">(</span><span class="n">Block</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A block that contains config for an OpenAI Image Model.</span>
+<span class="sd">    Learn more in the [OpenAPI Image generation docs](</span>
+<span class="sd">        https://beta.openai.com/docs/guides/images)</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        openai_credentials: The credentials used to authenticate with OpenAI.</span>
@@ -927,9 +1011,7 @@ to <a href="https://beta.openai.com/docs/api-reference/images/create"><code>open
 </details>
       <details class="quote">
         <summary>Source code in <code>prefect_openai/image.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 71</span>
 <span class="normal"> 72</span>
 <span class="normal"> 73</span>
 <span class="normal"> 74</span>
@@ -966,7 +1048,9 @@ to <a href="https://beta.openai.com/docs/api-reference/images/create"><code>open
 <span class="normal">105</span>
 <span class="normal">106</span>
 <span class="normal">107</span>
-<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@sync_compatible</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@sync_compatible</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">submit_prompt</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">acreate_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OpenAIObject</span><span class="p">:</span>
@@ -1150,7 +1234,7 @@ to <a href="https://beta.openai.com/docs/api-reference/images/create"><code>open
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
