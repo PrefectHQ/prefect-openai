@@ -74,6 +74,7 @@ nav:
   - Home: index.md
   - Blocks Catalog: blocks_catalog.md
   - Examples Catalog: examples_catalog.md
+  - Flow Run Name Art: flow_run_name_art.md
   - API Reference:
     - Credentials: credentials.md
     - Completion: completion.md
