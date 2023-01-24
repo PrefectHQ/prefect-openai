@@ -1,5 +1,5 @@
 import pytest
-from prefect.testing.utilities import MagicMock, prefect_test_harness
+from prefect.testing.utilities import AsyncMock, MagicMock, prefect_test_harness
 
 from prefect_openai.credentials import OpenAICredentials
 
@@ -34,7 +34,13 @@ async def mock_acreate(prompt, **kwargs):
 @pytest.fixture
 def mock_openai_credentials(monkeypatch) -> OpenAICredentials:
     mock_model = MagicMock()
+    mock_block_load = AsyncMock()
     mock_model.acreate.side_effect = mock_acreate
     monkeypatch.setattr("openai.Completion", mock_model)
     monkeypatch.setattr("openai.Image", mock_model)
-    return OpenAICredentials(api_key="my_api_key", _mock_model=mock_model)
+    monkeypatch.setattr(
+        "prefect_openai.completion.CompletionModel.load", mock_block_load
+    )
+    return OpenAICredentials(
+        api_key="my_api_key", _mock_model=mock_model, _mock_block_load=mock_block_load
+    )

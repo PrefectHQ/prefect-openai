@@ -1,12 +1,14 @@
 """Module for generating and configuring OpenAI completions."""
+import functools
 from logging import Logger
-from typing import Any, Dict, Optional, Union
+from typing import Any, Callable, Dict, Optional, Tuple, Union
 
 from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
+from prefect.client.schemas import State
 from prefect.exceptions import MissingContextError
 from prefect.logging.loggers import get_logger, get_run_logger
-from prefect.utilities.asyncutils import sync_compatible
+from prefect.utilities.asyncutils import is_async_fn, sync_compatible
 from pydantic import Field
 from typing_extensions import Literal
 
@@ -155,3 +157,68 @@ class CompletionModel(Block):
             f"model with {total_tokens} tokens, creating {num_choices} choice(s)."
         )
         return creation
+
+
+@sync_compatible
+async def _create_interpreted_exc(block_name: str, exc: Exception) -> str:
+    """
+    Helper function for reuse so that this doesn't get repeated for sync/async flavors.
+    """
+    completion_model = await CompletionModel.load(block_name)
+    prompt = f"Summarize: ```{str(exc)}```."
+    response = await completion_model.submit_prompt(prompt)
+    interpretation = f"[OpenAI Interpretation] {response.choices[0].text.strip()}"
+    return type(exc)(interpretation)
+
+
+def interpret_exception(block_name: str) -> Callable:
+    """
+    Use OpenAI to interpret the exception raised from the decorated function.
+    If used with a flow and return_state=True, will override the original state's
+    data and message with the OpenAI interpretation.
+
+    Args:
+        block_name: The name of the CompletionModel block to use for the summary.
+
+    Returns:
+        A decorator that will use an OpenAI CompletionModel to interpret the exception
+        raised from the decorated function.
+    """
+
+    def decorator(fn: Callable) -> Callable:
+        """
+        The actual decorator.
+        """
+
+        @functools.wraps(fn)
+        def wrapper(*args: Tuple[Any], **kwargs: Dict[str, Any]) -> Any:
+            """
+            The sync version of the wrapper function that will execute the function.
+            """
+            try:
+                result = fn(*args, **kwargs)
+                if isinstance(result, State) and result.is_failed():
+                    result.data = _create_interpreted_exc(block_name, result.data)
+                    result.message = str(result.data)
+                return result
+            except Exception as exc:
+                raise _create_interpreted_exc(block_name, exc) from exc
+
+        # couldn't get sync_compatible working so had to define an async flavor
+        @functools.wraps(fn)
+        async def async_wrapper(*args: Tuple[Any], **kwargs: Dict[str, Any]) -> Any:
+            """
+            The async version of the wrapper function that will execute the function.
+            """
+            try:
+                result = await fn(*args, **kwargs)
+                if isinstance(result, State) and result.is_failed():
+                    result.data = await _create_interpreted_exc(block_name, result.data)
+                    result.message = str(result.data)
+                return result
+            except Exception as exc:
+                raise (await _create_interpreted_exc(block_name, exc)) from exc
+
+        return async_wrapper if is_async_fn(fn) else wrapper
+
+    return decorator
