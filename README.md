@@ -1,6 +1,8 @@
 # Coordinate and use AI in your dataflow with `prefect-openai`
 
 <p align="center">
+    <img src="https://user-images.githubusercontent.com/15331990/213825004-eedb25b3-0520-4f55-95d3-3a3fc8b235ff.png">
+    <br>
     <a href="https://pypi.python.org/pypi/prefect-openai/" alt="PyPI version">
         <img alt="PyPI" src="https://img.shields.io/pypi/v/prefect-openai?color=0052FF&labelColor=090422"></a>
     <a href="https://github.com/PrefectHQ/prefect-openai/" alt="Stars">
