@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `organization` field to the `OpenAICredentials` - [#8](https://github.com/PrefectHQ/prefect-openai/pull/8)
+- `interpret_exception` decorator - [#11](https://github.com/PrefectHQ/prefect-openai/pull/11)
 
 ### Changed
 
