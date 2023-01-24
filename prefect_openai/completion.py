@@ -3,7 +3,9 @@ from logging import Logger
 from typing import Any, Dict, Optional, Union
 
 from openai.openai_object import OpenAIObject
+from prefect.blocks.abstract import NotificationBlock
 from prefect.blocks.core import Block
+from prefect.blocks.notifications import SlackWebhook
 from prefect.exceptions import MissingContextError
 from prefect.logging.loggers import get_logger, get_run_logger
 from prefect.utilities.asyncutils import sync_compatible
@@ -155,3 +157,32 @@ class CompletionModel(Block):
             f"model with {total_tokens} tokens, creating {num_choices} choice(s)."
         )
         return creation
+
+
+class OpenAINotification(NotificationBlock):
+    """
+    A block that summarizes input body text using OpenAI and notifies
+    the user via a separate notification block. Intended for use with
+    exceptions.
+    """
+
+    _block_type_name = "OpenAI Notification"
+    _logo_url = "https://images.ctfassets.net/gm98wzqotmnx/QE8JwcbZBmIfiognXDLcY/2bcd4c759f877d37159f576101218b49/open-ai-logo-8B9BFEDC26-seeklogo.com.png?h=250"  # noqa
+    _documentation_url = "https://prefecthq.github.io/prefect-openai/completion/#prefect_openai.completion.CompletionModel"  # noqa
+
+    completion_model: CompletionModel = Field(
+        description="The block used to summarize the body."
+    )
+    notification_block: SlackWebhook = Field(description="The block used to notify.")
+
+    @sync_compatible
+    async def notify(self, body: str, subject: Optional[str] = None):
+        """
+        Summarizes the body using OpenAI and notifies the user
+        via a separate notification block.
+        """
+
+        prompt = f"Summarize: ```{body}```"
+        response = await self.completion_model.submit_prompt(prompt)
+        interpretation = f"[OpenAI Interpretation] {response.choices[0].text.strip()}"
+        await self.notification_block.notify(body=interpretation, subject=subject)
