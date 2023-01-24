@@ -7,6 +7,7 @@ from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
 from prefect.client.schemas import State
 from prefect.exceptions import MissingContextError
+from prefect.flows import Flow
 from prefect.logging.loggers import get_logger, get_run_logger
 from prefect.utilities.asyncutils import is_async_fn, sync_compatible
 from pydantic import Field
@@ -171,6 +172,27 @@ async def _create_interpreted_exc(block_name: str, exc: Exception) -> str:
     return type(exc)(interpretation)
 
 
+class _WrappedFlow(Flow):
+    """Updates the wrapper function to a Prefect flow so that it can be deployed."""
+
+    def __init__(self, wrapper):
+        """
+        Args:
+            wrapper: The function to wrap.
+        """
+        if type(wrapper.__wrapped__) != Flow:
+            raise RuntimeError("This class can only wrap Prefect flows.")
+
+        self.wrapper = wrapper
+        functools.update_wrapper(self, wrapper.__wrapped__)
+
+    def __call__(self, *args, **kwargs):
+        """
+        Call the wrapped function and return the result.
+        """
+        return self.wrapper(*args, **kwargs)
+
+
 def interpret_exception(block_name: str) -> Callable:
     """
     Use OpenAI to interpret the exception raised from the decorated function.
@@ -205,7 +227,7 @@ def interpret_exception(block_name: str) -> Callable:
         """
 
         @functools.wraps(fn)
-        def wrapper(*args: Tuple[Any], **kwargs: Dict[str, Any]) -> Any:
+        def sync_wrapper(*args: Tuple[Any], **kwargs: Dict[str, Any]) -> Any:
             """
             The sync version of the wrapper function that will execute the function.
             """
@@ -233,6 +255,10 @@ def interpret_exception(block_name: str) -> Callable:
             except Exception as exc:
                 raise (await _create_interpreted_exc(block_name, exc)) from exc
 
-        return async_wrapper if is_async_fn(fn) else wrapper
+        wrapper = async_wrapper if is_async_fn(fn) else sync_wrapper
+        if isinstance(fn, Flow):
+            # make deployments work
+            wrapper = _WrappedFlow(wrapper)
+        return wrapper
 
     return decorator
