@@ -183,6 +183,20 @@ def interpret_exception(block_name: str) -> Callable:
     Returns:
         A decorator that will use an OpenAI CompletionModel to interpret the exception
         raised from the decorated function.
+    
+    Examples:
+        Interpret the exception raised from a flow.
+        ```python
+        from prefect import flow
+        from prefect_openai.completion import interpret_exception
+
+        @interpret_exception("BLOCK_NAME")
+        @flow
+        def example_flow():
+            return 1 / 0
+
+        example_flow()
+        ```
     """
 
     def decorator(fn: Callable) -> Callable:
