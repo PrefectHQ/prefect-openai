@@ -1,14 +1,15 @@
 """Module for generating and configuring OpenAI completions."""
 import functools
+import sys
 from logging import Logger
 from typing import Any, Callable, Dict, Optional, Tuple, Union
 
 from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
-from prefect.client.schemas import State
 from prefect.exceptions import MissingContextError
 from prefect.flows import Flow
 from prefect.logging.loggers import get_logger, get_run_logger
+from prefect.tasks import Task
 from prefect.utilities.asyncutils import is_async_fn, sync_compatible
 from pydantic import Field
 from typing_extensions import Literal
@@ -91,6 +92,7 @@ class CompletionModel(Block):
         is called from within a flow or task run context.
         If a run context is present, the logger property returns a run logger.
         Else, it returns a default logger labeled with the class's name.
+
         Returns:
             The run logger or a default logger with the class's name.
         """
@@ -161,36 +163,19 @@ class CompletionModel(Block):
 
 
 @sync_compatible
-async def _create_interpreted_exc(block_name: str, exc: Exception) -> str:
+async def _raise_interpreted_exc(block_name: str, exc: Exception):
     """
     Helper function for reuse so that this doesn't get repeated for sync/async flavors.
     """
+    traceback = sys.exc_info()[-1]
     completion_model = await CompletionModel.load(block_name)
     prompt = f"Summarize: ```{str(exc)}```."
     response = await completion_model.submit_prompt(prompt)
-    interpretation = f"[OpenAI Interpretation] {response.choices[0].text.strip()}"
-    return type(exc)(interpretation)
-
-
-class _WrappedFlow(Flow):
-    """Updates the wrapper function to a Prefect flow so that it can be deployed."""
-
-    def __init__(self, wrapper):
-        """
-        Args:
-            wrapper: The function to wrap.
-        """
-        if type(wrapper.__wrapped__) != Flow:
-            raise RuntimeError("This class can only wrap Prefect flows.")
-
-        self.wrapper = wrapper
-        functools.update_wrapper(self, wrapper.__wrapped__)
-
-    def __call__(self, *args, **kwargs):
-        """
-        Call the wrapped function and return the result.
-        """
-        return self.wrapper(*args, **kwargs)
+    interpretation = f"{response.choices[0].text.strip()}"
+    exc_msg = f"{exc}\nOpenAI: {interpretation}"
+    # push the original traceback to the tail so it's not obscured by
+    # the additional logic in this except clause
+    raise type(exc)(exc_msg).with_traceback(traceback) from exc
 
 
 def interpret_exception(block_name: str) -> Callable:
@@ -212,8 +197,8 @@ def interpret_exception(block_name: str) -> Callable:
         from prefect import flow
         from prefect_openai.completion import interpret_exception
 
-        @interpret_exception("BLOCK_NAME")
         @flow
+        @interpret_exception("BLOCK_NAME")
         def example_flow():
             return 1 / 0
 
@@ -225,6 +210,11 @@ def interpret_exception(block_name: str) -> Callable:
         """
         The actual decorator.
         """
+        if isinstance(fn, (Flow, Task)):
+            raise ValueError(
+                "interpret_exception should be nested under the flow / task decorator, "
+                "e.g. `@flow` -> `@interpret_exception('curie')` -> `def function()`"
+            )
 
         @functools.wraps(fn)
         def sync_wrapper(*args: Tuple[Any], **kwargs: Dict[str, Any]) -> Any:
@@ -232,13 +222,9 @@ def interpret_exception(block_name: str) -> Callable:
             The sync version of the wrapper function that will execute the function.
             """
             try:
-                result = fn(*args, **kwargs)
-                if isinstance(result, State) and result.is_failed():
-                    result.data = _create_interpreted_exc(block_name, result.data)
-                    result.message = str(result.data)
-                return result
+                return fn(*args, **kwargs)
             except Exception as exc:
-                raise _create_interpreted_exc(block_name, exc) from exc
+                _raise_interpreted_exc(block_name, exc)
 
         # couldn't get sync_compatible working so had to define an async flavor
         @functools.wraps(fn)
@@ -247,18 +233,11 @@ def interpret_exception(block_name: str) -> Callable:
             The async version of the wrapper function that will execute the function.
             """
             try:
-                result = await fn(*args, **kwargs)
-                if isinstance(result, State) and result.is_failed():
-                    result.data = await _create_interpreted_exc(block_name, result.data)
-                    result.message = str(result.data)
-                return result
+                return await fn(*args, **kwargs)
             except Exception as exc:
-                raise (await _create_interpreted_exc(block_name, exc)) from exc
+                await _raise_interpreted_exc(block_name, exc)
 
         wrapper = async_wrapper if is_async_fn(fn) else sync_wrapper
-        if isinstance(fn, Flow):
-            # make deployments work
-            wrapper = _WrappedFlow(wrapper)
         return wrapper
 
     return decorator

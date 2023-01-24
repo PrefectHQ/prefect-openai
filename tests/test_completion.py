@@ -1,9 +1,7 @@
 from unittest.mock import MagicMock
 
 import pytest
-from prefect import flow
-from prefect.client.schemas import State
-from prefect.utilities.asyncutils import is_async_fn
+from prefect import flow, task
 
 from prefect_openai.completion import CompletionModel, interpret_exception
 
@@ -42,62 +40,145 @@ def test_completion_model_create_override(mock_openai_credentials: MagicMock):
     )
 
 
-class TestInterpretException:
-    def sync_fn(divisor: int):
+class TestInterpretExceptionNoError:
+    @interpret_exception("curie")
+    def sync_fn(self, divisor: int):
         return 1 / divisor
 
-    async def async_fn(divisor: int):
-        return 1 / divisor
-
-    @flow
-    def sync_flow(divisor: int):
-        return 1 / divisor
-
-    @flow
-    async def async_flow(divisor: int):
-        return 1 / divisor
-
-    @pytest.mark.parametrize("fn", [sync_fn, async_fn, sync_flow, async_flow])
-    async def test_interpret_exception_no_error(self, mock_openai_credentials, fn):
-        decorated_fn = interpret_exception("curie")(fn)
-        if is_async_fn(fn):
-            assert (await decorated_fn(1)) == 1
-        else:
-            assert decorated_fn(1) == 1
+    def test_sync_fn(self, mock_openai_credentials):
+        assert self.sync_fn(1) == 1
         assert mock_openai_credentials._mock_block_load.call_count == 0
 
-    @pytest.mark.parametrize("fn", [sync_fn, sync_flow])
-    def test_interpret_exception_error(self, mock_openai_credentials, fn):
-        decorated_fn = interpret_exception("curie")(fn)
-        with pytest.raises(ZeroDivisionError) as exc_info:
-            decorated_fn(0)
-        assert exc_info.value.args[0].startswith("[OpenAI Interpretation]")
-        mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+    @pytest.mark.parametrize("return_state", [True, False])
+    def test_sync_flow(self, mock_openai_credentials, return_state):
+        result = flow(self.sync_fn)(1, return_state=return_state)
+        if return_state:
+            result = result.result()
+        assert result == 1
+        assert mock_openai_credentials._mock_block_load.call_count == 0
 
-    @pytest.mark.parametrize("fn", [async_fn, async_flow])
-    async def test_interpret_exception_error_async(self, mock_openai_credentials, fn):
-        decorated_fn = interpret_exception("curie")(fn)
-        with pytest.raises(ZeroDivisionError) as exc_info:
-            await decorated_fn(0)
-        assert exc_info.value.args[0].startswith("[OpenAI Interpretation]")
-        mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+    @pytest.mark.parametrize("return_state", [True, False])
+    def test_sync_task(self, mock_openai_credentials, return_state):
+        @flow
+        def a_flow():
+            return task(self.sync_fn)(1, return_state=return_state)
 
-    def test_interpret_exception_flow_return_state(self, mock_openai_credentials):
-        decorated_fn = interpret_exception("curie")(self.sync_flow)
-        result = decorated_fn(0, return_state=True)
-        assert isinstance(result, State)
-        assert result.message.startswith("[OpenAI Interpretation]")
-        assert str(result.data) == result.message
-        assert isinstance(result.data, ZeroDivisionError)
-        mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+        result = a_flow()
+        if return_state:
+            result = result.result()
+        assert result == 1
+        assert mock_openai_credentials._mock_block_load.call_count == 0
 
-    async def test_interpret_exception_flow_return_state_async(
-        self, mock_openai_credentials
-    ):
-        decorated_fn = interpret_exception("curie")(self.async_flow)
-        result = await decorated_fn(0, return_state=True)
-        assert isinstance(result, State)
-        assert result.message.startswith("[OpenAI Interpretation]")
-        assert str(result.data) == result.message
-        assert isinstance(result.data, ZeroDivisionError)
+    @interpret_exception("curie")
+    async def async_fn(self, divisor: int):
+        return 1 / divisor
+
+    async def test_async_fn(self, mock_openai_credentials):
+        assert await self.async_fn(1) == 1
+        assert mock_openai_credentials._mock_block_load.call_count == 0
+
+    @pytest.mark.parametrize("return_state", [True, False])
+    async def test_async_flow(self, mock_openai_credentials, return_state):
+        result = await flow(self.async_fn)(1, return_state=return_state)
+        if return_state:
+            result = result.result()
+        assert result == 1
+        assert mock_openai_credentials._mock_block_load.call_count == 0
+
+    @pytest.mark.parametrize("return_state", [True, False])
+    async def test_async_task(self, mock_openai_credentials, return_state):
+        @flow
+        async def a_flow():
+            return await task(self.async_fn)(1, return_state=return_state)
+
+        result = await a_flow()
+        if return_state:
+            result = result.result()
+        assert result == 1
+        assert mock_openai_credentials._mock_block_load.call_count == 0
+
+
+class TestInterpretExceptionError:
+    @interpret_exception("curie")
+    def sync_fn(self, divisor: int):
+        return 1 / divisor
+
+    def test_sync_fn(self, mock_openai_credentials):
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            self.sync_fn(0)
         mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+        assert mock_openai_credentials._mock_block_load.call_count == 1
+
+    @pytest.mark.parametrize("return_state", [True, False])
+    def test_sync_flow(self, mock_openai_credentials, return_state):
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            result = flow(self.sync_fn)(0, return_state=return_state)
+            if return_state:
+                result = result.result()
+        mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+        assert mock_openai_credentials._mock_block_load.call_count == 1
+
+    @pytest.mark.parametrize("return_state", [True, False])
+    def test_sync_task(self, mock_openai_credentials, return_state):
+        @flow
+        def a_flow():
+            return task(self.sync_fn)(0, return_state=return_state)
+
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            result = a_flow()
+            if return_state:
+                result = result.result()
+        mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+        assert mock_openai_credentials._mock_block_load.call_count == 1
+
+    @interpret_exception("curie")
+    async def async_fn(self, divisor: int):
+        return 1 / divisor
+
+    async def test_async_fn(self, mock_openai_credentials):
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            await self.async_fn(0)
+        mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+        assert mock_openai_credentials._mock_block_load.call_count == 1
+
+    @pytest.mark.parametrize("return_state", [True, False])
+    async def test_async_flow(self, mock_openai_credentials, return_state):
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            result = await (flow(self.async_fn)(0, return_state=return_state))
+            if return_state:
+                result = await result.result(fetch=True)
+        mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+        assert mock_openai_credentials._mock_block_load.call_count == 1
+
+    @pytest.mark.parametrize("return_state", [True, False])
+    async def test_async_task(self, mock_openai_credentials, return_state):
+        @flow
+        async def a_flow():
+            return await task(self.async_fn)(0, return_state=return_state)
+
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            result = await a_flow()
+            if return_state:
+                result = await result.result(fetch=True)
+        mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
+        assert mock_openai_credentials._mock_block_load.call_count == 1
+
+
+class TestInterpretExceptionImproperUse:
+    def test_flow(self):
+        match = "interpret_exception should be nested under the flow / task decorator"
+        with pytest.raises(ValueError, match=match):
+
+            @interpret_exception("curie")
+            @flow
+            def sync_flow(self, divisor: int):
+                return 1 / divisor
+
+    def test_task(self):
+        match = "interpret_exception should be nested under the flow / task decorator"
+        with pytest.raises(ValueError, match=match):
+
+            @interpret_exception("curie")
+            @task
+            def sync_task(self, divisor: int):
+                return 1 / divisor
