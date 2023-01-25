@@ -33,8 +33,9 @@ async def mock_acreate(prompt, **kwargs):
 
 @pytest.fixture
 def mock_openai_credentials(monkeypatch) -> OpenAICredentials:
-    mock_model = MagicMock()
+    mock_model = AsyncMock(name="mock_model")
     mock_block_load = AsyncMock()
+    mock_block_load.return_value = mock_model
     mock_model.acreate.side_effect = mock_acreate
     monkeypatch.setattr("openai.Completion", mock_model)
     monkeypatch.setattr("openai.Image", mock_model)
