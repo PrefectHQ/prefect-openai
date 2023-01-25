@@ -241,6 +241,21 @@ class TestInterpretExceptionError:
             "return 1 / divisor\n\ndivision by zero\n```"
         )
 
+    def test_zero_traceback_tail(self, mock_openai_credentials):
+        """
+        Test whether the prompt prefix is added.
+        """
+
+        @interpret_exception("curie", traceback_tail=0)
+        def sync_fn(divisor: int):
+            return 1 / divisor
+
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            sync_fn(0)
+        mock_openai_credentials._mock_model.submit_prompt.assert_called_once_with(
+            "Explain: ```\ndivision by zero\n```"
+        )
+
 
 class TestInterpretExceptionImproperUse:
     def test_flow(self):
