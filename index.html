@@ -621,6 +621,23 @@
 </code></pre></div>
 Notice how the original traceback was quite long and confusing.</p>
 <p>On the flip side, the Curie GPT3 model was able to summarize the issue eloquently!</p>
+<div class="admonition info">
+<p class="admonition-title">Built-in decorator</p>
+<p>No need to build this yourself, <code>prefect-openai</code> features a
+<a href="completion/#prefect_openai.completion.interpret_exception">built-in decorator</a>
+to help you automatically catch and interpret exceptions in flows, tasks, and even
+vanilla Python functions.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">httpx</span>
+<span class="kn">from</span> <span class="nn">prefect_openai.completion</span> <span class="kn">import</span> <span class="n">interpret_exception</span>
+
+<span class="nd">@interpret_exception</span><span class="p">(</span><span class="s2">&quot;COMPLETION_MODEL_BLOCK_NAME_PLACEHOLDER&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">example_func</span><span class="p">():</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://httpbin.org/status/403&quot;</span><span class="p">)</span>
+    <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+<span class="n">example_func</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <h2 id="create-a-story-around-a-flow-run-name-with-gpt3-and-dall-e">Create a story around a flow run name with GPT3 and DALL-E</h2>
 <p>Have you marveled at all the AI-generated images and wondered how others did it?</p>
 <p>After installing <code>prefect-openai</code> and <a href="#saving-an-openai-key">saving an OpenAI key</a>, you, too, can create AI-generated art.</p>
