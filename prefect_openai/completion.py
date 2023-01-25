@@ -1,7 +1,6 @@
 """Module for generating and configuring OpenAI completions."""
 import functools
 import inspect
-import sys
 from logging import Logger
 from typing import Any, Callable, Dict, Optional, Tuple, Union
 
@@ -171,7 +170,7 @@ async def _raise_interpreted_exc(block_name: str, exc: Exception):
     try:
         # gather args and kwargs from the original exception to rebuild
         exc_type = type(exc)
-        exc_traceback = sys.exc_info()[-1]
+        exc_traceback = exc.__traceback__
         args = exc.args[1:]  # first arg is message, which we're overwriting
         try:
             signature = inspect.signature(exc_type)
@@ -193,9 +192,7 @@ async def _raise_interpreted_exc(block_name: str, exc: Exception):
 
         # push the original traceback to the tail so it's not obscured by
         # the additional logic in this except clause
-        raise exc_type(new_exc_msg, *args, **kwargs).with_traceback(
-            exc_traceback
-        ) from exc
+        raise exc_type(new_exc_msg, *args, **kwargs).with_traceback(exc_traceback)
     except Exception:
         # if anything unexpected goes wrong, just raise the original exception
         raise
