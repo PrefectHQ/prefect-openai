@@ -9,12 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `organization` field to the `OpenAICredentials` - [#8](https://github.com/PrefectHQ/prefect-openai/pull/8)
-- `interpret_exception` decorator - [#11](https://github.com/PrefectHQ/prefect-openai/pull/11)
-
 ### Changed
-
-- Made `model` to be a `Union[Literal, str]` - [#9](https://github.com/PrefectHQ/prefect-openai/pull/9)
 
 ### Deprecated
 
@@ -23,6 +18,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+
+## 0.1.1
+
+Released on January 25th, 2022.
+
+### Added
+
+- `organization` field to the `OpenAICredentials` - [#8](https://github.com/PrefectHQ/prefect-openai/pull/8)
+- `interpret_exception` decorator - [#11](https://github.com/PrefectHQ/prefect-openai/pull/11)
+
+### Changed
+
+- Made `model` to be a `Union[Literal, str]` - [#9](https://github.com/PrefectHQ/prefect-openai/pull/9)
 
 ## 0.1.0
 
