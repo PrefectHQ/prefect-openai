@@ -82,7 +82,7 @@ class TestInterpretExceptionNoError:
     async def test_async_flow(self, mock_openai_credentials, return_state):
         result = await flow(self.async_fn)(1, return_state=return_state)
         if return_state:
-            result = result.result()
+            result = await result.result(fetch=True)
         assert result == 1
         assert mock_openai_credentials._mock_block_load.call_count == 0
 
@@ -94,7 +94,7 @@ class TestInterpretExceptionNoError:
 
         result = await a_flow()
         if return_state:
-            result = result.result()
+            result = await result.result(fetch=True)
         assert result == 1
         assert mock_openai_credentials._mock_block_load.call_count == 0
 
@@ -208,6 +208,38 @@ class TestInterpretExceptionError:
 
         with pytest.raises(CustomException, match="OpenAI"):
             custom_fn()
+
+    def test_prompt_prefix(self, mock_openai_credentials):
+        """
+        Test whether the prompt prefix is added.
+        """
+
+        @interpret_exception("curie", prompt_prefix="Solution to:")
+        def sync_fn(divisor: int):
+            return 1 / divisor
+
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            sync_fn(0)
+        mock_openai_credentials._mock_model.submit_prompt.assert_called_once_with(
+            "Solution to: ```\ndivision by zero\n```"
+        )
+
+    def test_traceback_tail(self, mock_openai_credentials):
+        """
+        Test whether the prompt prefix is added.
+        """
+
+        @interpret_exception("curie", traceback_tail=1)
+        def sync_fn(divisor: int):
+            return 1 / divisor
+
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            sync_fn(0)
+        mock_openai_credentials._mock_model.submit_prompt.assert_called_once_with(
+            'Explain: ```\n  File "/Users/andrew/Applications/python/prefect-openai/'
+            'tests/test_completion.py", line 234, in sync_fn\n    '
+            "return 1 / divisor\n\ndivision by zero\n```"
+        )
 
 
 class TestInterpretExceptionImproperUse:
