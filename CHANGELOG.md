@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `organization` field to the `OpenAICredentials` - [#8](https://github.com/PrefectHQ/prefect-openai/pull/8)
 - `interpret_exception` decorator - [#11](https://github.com/PrefectHQ/prefect-openai/pull/11)
+- `prompt_prefix` and `traceback_tail` keyword args to `interpret_exception` - [#14](https://github.com/PrefectHQ/prefect-openai/pull/14)
 
 ### Changed
 

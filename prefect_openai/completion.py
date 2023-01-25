@@ -1,6 +1,7 @@
 """Module for generating and configuring OpenAI completions."""
 import functools
 import inspect
+import traceback
 from logging import Logger
 from typing import Any, Callable, Dict, Optional, Tuple, Union
 
@@ -163,7 +164,9 @@ class CompletionModel(Block):
 
 
 @sync_compatible
-async def _raise_interpreted_exc(block_name: str, exc: Exception):
+async def _raise_interpreted_exc(
+    block_name: str, prompt_prefix: str, traceback_tail: int, exc: Exception
+):
     """
     Helper function for reuse so that this doesn't get repeated for sync/async flavors.
     """
@@ -185,7 +188,14 @@ async def _raise_interpreted_exc(block_name: str, exc: Exception):
 
         # create a new message
         completion_model = await CompletionModel.load(block_name)
-        prompt = f"Interpret & explain: ```\n{str(exc)}\n```"
+        if traceback_tail > 0:
+            traceback_lines = "".join(
+                traceback.format_tb(exc.__traceback__)[-traceback_tail:]
+            )
+            exc_input = f"{traceback_lines}\n{exc}"
+        else:
+            exc_input = str(exc)
+        prompt = f"{prompt_prefix} ```\n{exc_input}\n```"
         response = await completion_model.submit_prompt(prompt)
         interpretation = f"{response.choices[0].text.strip()}"
         new_exc_msg = f"{exc}\nOpenAI: {interpretation}"
@@ -198,7 +208,9 @@ async def _raise_interpreted_exc(block_name: str, exc: Exception):
         raise
 
 
-def interpret_exception(completion_model_name: str) -> Callable:
+def interpret_exception(
+    completion_model_name: str, prompt_prefix: str = "Explain:", traceback_tail: int = 0
+) -> Callable:
     """
     Use OpenAI to interpret the exception raised from the decorated function.
     If used with a flow and return_state=True, will override the original state's
@@ -207,6 +219,12 @@ def interpret_exception(completion_model_name: str) -> Callable:
     Args:
         completion_model_name: The name of the CompletionModel
             block to use to interpret the caught exception.
+        prompt_prefix: The prefix to include in the prompt ahead of the traceback
+            and exception message.
+        traceback_tail: The number of lines of the original traceback to include
+            in the prompt to OpenAI, starting from the tail. If 0, only include the
+            exception message in the prompt. Note this can be costly in terms of tokens
+            so be sure to set this and the max_tokens in CompletionModel appropriately.
 
     Returns:
         A decorator that will use an OpenAI CompletionModel to interpret the exception
@@ -221,6 +239,25 @@ def interpret_exception(completion_model_name: str) -> Callable:
 
         @flow
         @interpret_exception("COMPLETION_MODEL_BLOCK_NAME_PLACEHOLDER")
+        def example_flow():
+            resp = httpx.get("https://httpbin.org/status/403")
+            resp.raise_for_status()
+
+        example_flow()
+        ```
+
+        Use a unique prefix and include the last line of the traceback in the prompt.
+        ```python
+        import httpx
+        from prefect import flow
+        from prefect_openai.completion import interpret_exception
+
+        @flow
+        @interpret_exception(
+            "COMPLETION_MODEL_BLOCK_NAME_PLACEHOLDER",
+            prompt_prefix="Offer a solution:",
+            traceback_tail=1,
+        )
         def example_flow():
             resp = httpx.get("https://httpbin.org/status/403")
             resp.raise_for_status()
@@ -247,7 +284,9 @@ def interpret_exception(completion_model_name: str) -> Callable:
             try:
                 return fn(*args, **kwargs)
             except Exception as exc:
-                _raise_interpreted_exc(completion_model_name, exc)
+                _raise_interpreted_exc(
+                    completion_model_name, prompt_prefix, traceback_tail, exc
+                )
 
         # couldn't get sync_compatible working so had to define an async flavor
         @functools.wraps(fn)
@@ -258,7 +297,9 @@ def interpret_exception(completion_model_name: str) -> Callable:
             try:
                 return await fn(*args, **kwargs)
             except Exception as exc:
-                await _raise_interpreted_exc(completion_model_name, exc)
+                await _raise_interpreted_exc(
+                    completion_model_name, prompt_prefix, traceback_tail, exc
+                )
 
         wrapper = async_wrapper if is_async_fn(fn) else sync_wrapper
         return wrapper

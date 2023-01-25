@@ -82,7 +82,7 @@ class TestInterpretExceptionNoError:
     async def test_async_flow(self, mock_openai_credentials, return_state):
         result = await flow(self.async_fn)(1, return_state=return_state)
         if return_state:
-            result = result.result()
+            result = await result.result(fetch=True)
         assert result == 1
         assert mock_openai_credentials._mock_block_load.call_count == 0
 
@@ -94,7 +94,7 @@ class TestInterpretExceptionNoError:
 
         result = await a_flow()
         if return_state:
-            result = result.result()
+            result = await result.result(fetch=True)
         assert result == 1
         assert mock_openai_credentials._mock_block_load.call_count == 0
 
@@ -208,6 +208,53 @@ class TestInterpretExceptionError:
 
         with pytest.raises(CustomException, match="OpenAI"):
             custom_fn()
+
+    def test_prompt_prefix(self, mock_openai_credentials):
+        """
+        Test whether the prompt prefix is added.
+        """
+
+        @interpret_exception("curie", prompt_prefix="Solution to:")
+        def sync_fn(divisor: int):
+            return 1 / divisor
+
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            sync_fn(0)
+
+        mock_openai_credentials._mock_model.submit_prompt.assert_called_once_with(
+            "Solution to: ```\ndivision by zero\n```"
+        )
+
+    def test_traceback_tail(self, mock_openai_credentials):
+        """
+        Test whether the prompt prefix is added.
+        """
+
+        @interpret_exception("curie", traceback_tail=1)
+        def sync_fn(divisor: int):
+            return 1 / divisor
+
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            sync_fn(0)
+
+        args_list = mock_openai_credentials._mock_model.submit_prompt.call_args_list[0]
+        input_arg = args_list[0][0]
+        assert "return 1 / divisor\n\ndivision by zero\n`" in input_arg
+
+    def test_zero_traceback_tail(self, mock_openai_credentials):
+        """
+        Test whether the prompt prefix is added.
+        """
+
+        @interpret_exception("curie", traceback_tail=0)
+        def sync_fn(divisor: int):
+            return 1 / divisor
+
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            sync_fn(0)
+        mock_openai_credentials._mock_model.submit_prompt.assert_called_once_with(
+            "Explain: ```\ndivision by zero\n```"
+        )
 
 
 class TestInterpretExceptionImproperUse:
