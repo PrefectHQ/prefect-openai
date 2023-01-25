@@ -246,7 +246,7 @@ def interpret_exception(
         example_flow()
         ```
 
-        Use a unique prefix and include the last line of the traceback for the prompt.
+        Use a unique prefix and include the last line of the traceback in the prompt.
         ```python
         import httpx
         from prefect import flow
@@ -263,6 +263,7 @@ def interpret_exception(
             resp.raise_for_status()
 
         example_flow()
+        ```
     """
 
     def decorator(fn: Callable) -> Callable:
