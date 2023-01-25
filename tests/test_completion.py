@@ -164,6 +164,17 @@ class TestInterpretExceptionError:
         mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
         assert mock_openai_credentials._mock_block_load.call_count == 1
 
+    def test_flow_args(self, mock_openai_credentials):
+        """
+        Test whether flow kwargs are still working.
+        """
+        my_flow = flow(self.sync_fn, retries=2)
+        assert my_flow.retries == 2
+        with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
+            my_flow(0)
+        # 2 retries + original try == 3
+        assert mock_openai_credentials._mock_block_load.call_count == 3
+
     def test_httpx_error(self, mock_openai_credentials, respx_mock):
         """
         Some errors, like HttpError, have additional args/kwargs to rebuild.
