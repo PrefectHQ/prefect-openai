@@ -1,12 +1,16 @@
 """Module for generating and configuring OpenAI completions."""
+import functools
+import inspect
 from logging import Logger
-from typing import Any, Dict, Optional, Union
+from typing import Any, Callable, Dict, Optional, Tuple, Union
 
 from openai.openai_object import OpenAIObject
 from prefect.blocks.core import Block
 from prefect.exceptions import MissingContextError
+from prefect.flows import Flow
 from prefect.logging.loggers import get_logger, get_run_logger
-from prefect.utilities.asyncutils import sync_compatible
+from prefect.tasks import Task
+from prefect.utilities.asyncutils import is_async_fn, sync_compatible
 from pydantic import Field
 from typing_extensions import Literal
 
@@ -88,6 +92,7 @@ class CompletionModel(Block):
         is called from within a flow or task run context.
         If a run context is present, the logger property returns a run logger.
         Else, it returns a default logger labeled with the class's name.
+
         Returns:
             The run logger or a default logger with the class's name.
         """
@@ -155,3 +160,107 @@ class CompletionModel(Block):
             f"model with {total_tokens} tokens, creating {num_choices} choice(s)."
         )
         return creation
+
+
+@sync_compatible
+async def _raise_interpreted_exc(block_name: str, exc: Exception):
+    """
+    Helper function for reuse so that this doesn't get repeated for sync/async flavors.
+    """
+    try:
+        # gather args and kwargs from the original exception to rebuild
+        exc_type = type(exc)
+        exc_traceback = exc.__traceback__
+        args = exc.args[1:]  # first arg is message, which we're overwriting
+        try:
+            signature = inspect.signature(exc_type)
+            kwargs = {
+                param.name: getattr(exc, param.name, None)
+                for param in signature.parameters.values()
+                if param.kind == param.KEYWORD_ONLY
+            }
+        except ValueError:
+            # no signature available like ZeroDivisionError
+            kwargs = {}
+
+        # create a new message
+        completion_model = await CompletionModel.load(block_name)
+        prompt = f"Interpret & explain: ```\n{str(exc)}\n```"
+        response = await completion_model.submit_prompt(prompt)
+        interpretation = f"{response.choices[0].text.strip()}"
+        new_exc_msg = f"{exc}\nOpenAI: {interpretation}"
+
+        # push the original traceback to the tail so it's not obscured by
+        # the additional logic in this except clause
+        raise exc_type(new_exc_msg, *args, **kwargs).with_traceback(exc_traceback)
+    except Exception:
+        # if anything unexpected goes wrong, just raise the original exception
+        raise
+
+
+def interpret_exception(completion_model_name: str) -> Callable:
+    """
+    Use OpenAI to interpret the exception raised from the decorated function.
+    If used with a flow and return_state=True, will override the original state's
+    data and message with the OpenAI interpretation.
+
+    Args:
+        completion_model_name: The name of the CompletionModel
+            block to use to interpret the caught exception.
+
+    Returns:
+        A decorator that will use an OpenAI CompletionModel to interpret the exception
+            raised from the decorated function.
+
+    Examples:
+        Interpret the exception raised from a flow.
+        ```python
+        import httpx
+        from prefect import flow
+        from prefect_openai.completion import interpret_exception
+
+        @flow
+        @interpret_exception("COMPLETION_MODEL_BLOCK_NAME_PLACEHOLDER")
+        def example_flow():
+            resp = httpx.get("https://httpbin.org/status/403")
+            resp.raise_for_status()
+
+        example_flow()
+        ```
+    """
+
+    def decorator(fn: Callable) -> Callable:
+        """
+        The actual decorator.
+        """
+        if isinstance(fn, (Flow, Task)):
+            raise ValueError(
+                "interpret_exception should be nested under the flow / task decorator, "
+                "e.g. `@flow` -> `@interpret_exception('curie')` -> `def function()`"
+            )
+
+        @functools.wraps(fn)
+        def sync_wrapper(*args: Tuple[Any], **kwargs: Dict[str, Any]) -> Any:
+            """
+            The sync version of the wrapper function that will execute the function.
+            """
+            try:
+                return fn(*args, **kwargs)
+            except Exception as exc:
+                _raise_interpreted_exc(completion_model_name, exc)
+
+        # couldn't get sync_compatible working so had to define an async flavor
+        @functools.wraps(fn)
+        async def async_wrapper(*args: Tuple[Any], **kwargs: Dict[str, Any]) -> Any:
+            """
+            The async version of the wrapper function that will execute the function.
+            """
+            try:
+                return await fn(*args, **kwargs)
+            except Exception as exc:
+                await _raise_interpreted_exc(completion_model_name, exc)
+
+        wrapper = async_wrapper if is_async_fn(fn) else sync_wrapper
+        return wrapper
+
+    return decorator

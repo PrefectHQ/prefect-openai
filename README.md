@@ -71,6 +71,25 @@ Notice how the original traceback was quite long and confusing.
 
 On the flip side, the Curie GPT3 model was able to summarize the issue eloquently!
 
+!!! info "Built-in decorator"
+
+    No need to build this yourself, `prefect-openai` features a
+    [built-in decorator](completion/#prefect_openai.completion.interpret_exception)
+    to help you automatically catch and interpret exceptions in flows, tasks, and even
+    vanilla Python functions.
+
+    ```python
+    import httpx
+    from prefect_openai.completion import interpret_exception
+
+    @interpret_exception("COMPLETION_MODEL_BLOCK_NAME_PLACEHOLDER")
+    def example_func():
+        resp = httpx.get("https://httpbin.org/status/403")
+        resp.raise_for_status()
+
+    example_func()
+    ```
+
 ## Create a story around a flow run name with GPT3 and DALL-E
 
 Have you marveled at all the AI-generated images and wondered how others did it?
