@@ -220,6 +220,7 @@ class TestInterpretExceptionError:
 
         with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
             sync_fn(0)
+
         mock_openai_credentials._mock_model.submit_prompt.assert_called_once_with(
             "Solution to: ```\ndivision by zero\n```"
         )
@@ -235,11 +236,10 @@ class TestInterpretExceptionError:
 
         with pytest.raises(ZeroDivisionError, match="\nOpenAI"):
             sync_fn(0)
-        mock_openai_credentials._mock_model.submit_prompt.assert_called_once_with(
-            'Explain: ```\n  File "/Users/andrew/Applications/python/prefect-openai/'
-            'tests/test_completion.py", line 234, in sync_fn\n    '
-            "return 1 / divisor\n\ndivision by zero\n```"
-        )
+
+        args_list = mock_openai_credentials._mock_model.submit_prompt.call_args_list[0]
+        input_arg = args_list[0][0]
+        assert "return 1 / divisor\n\ndivision by zero\n`" in input_arg
 
     def test_zero_traceback_tail(self, mock_openai_credentials):
         """
