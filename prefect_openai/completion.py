@@ -186,7 +186,7 @@ async def _raise_interpreted_exc(block_name: str, exc: Exception):
 
         # create a new message
         completion_model = await CompletionModel.load(block_name)
-        prompt = f"Summarize: ```{str(exc)}```."
+        prompt = f"Interpret & explain: ```\n{str(exc)}\n```"
         response = await completion_model.submit_prompt(prompt)
         interpretation = f"{response.choices[0].text.strip()}"
         new_exc_msg = f"{exc}\nOpenAI: {interpretation}"
@@ -218,13 +218,15 @@ def interpret_exception(completion_model_name: str) -> Callable:
     Examples:
         Interpret the exception raised from a flow.
         ```python
+        import httpx
         from prefect import flow
         from prefect_openai.completion import interpret_exception
 
         @flow
-        @interpret_exception("BLOCK_NAME")
+        @interpret_exception("COMPLETION_MODEL_BLOCK_NAME_PLACEHOLDER")
         def example_flow():
-            return 1 / 0
+            resp = httpx.get("https://httpbin.org/status/403")
+            resp.raise_for_status()
 
         example_flow()
         ```
