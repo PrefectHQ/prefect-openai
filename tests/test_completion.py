@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock
 
+import httpx
 import pytest
 from prefect import flow, task
 
@@ -162,6 +163,40 @@ class TestInterpretExceptionError:
                 result = await result.result(fetch=True)
         mock_openai_credentials._mock_block_load.assert_called_once_with("curie")
         assert mock_openai_credentials._mock_block_load.call_count == 1
+
+    def test_httpx_error(self, mock_openai_credentials, respx_mock):
+        """
+        Some errors, like HttpError, have additional args/kwargs to rebuild.
+        Specifically keyword-only args.
+        """
+        respx_mock.get("https://api.openai.com/v1/engines/curie").mock(
+            side_effect=httpx.HTTPError("test")
+        )
+
+        @interpret_exception("curie")
+        def request_web():
+            return httpx.get("https://api.openai.com/v1/engines/curie")
+
+        with pytest.raises(httpx.HTTPError, match="\nOpenAI"):
+            request_web()
+
+    def test_custom_error(self, mock_openai_credentials):
+        """
+        Test whether custom exceptions work too.
+        """
+
+        class CustomException(Exception):
+            def __init__(self, message, arg, keyword="keyword"):
+                self.message = message
+                self.arg = arg
+                self.keyword = keyword
+
+        @interpret_exception("curie")
+        def custom_fn():
+            raise CustomException("For testing only...", 1, keyword="keyword")
+
+        with pytest.raises(CustomException, match="\nOpenAI"):
+            custom_fn()
 
 
 class TestInterpretExceptionImproperUse:

@@ -1,5 +1,6 @@
 """Module for generating and configuring OpenAI completions."""
 import functools
+import inspect
 import sys
 from logging import Logger
 from typing import Any, Callable, Dict, Optional, Tuple, Union
@@ -167,15 +168,31 @@ async def _raise_interpreted_exc(block_name: str, exc: Exception):
     """
     Helper function for reuse so that this doesn't get repeated for sync/async flavors.
     """
-    traceback = sys.exc_info()[-1]
+    # gather args and kwargs from the original exception to rebuild
+    exc_type = type(exc)
+    exc_traceback = sys.exc_info()[-1]
+    args = exc.args[1:]  # first arg is message, which we're overwriting
+    try:
+        signature = inspect.signature(exc_type)
+        kwargs = {
+            param.name: getattr(exc, param.name, None)
+            for param in signature.parameters.values()
+            if param.kind == param.KEYWORD_ONLY
+        }
+    except ValueError:
+        # no signature available like ZeroDivisionError
+        kwargs = {}
+
+    # create a new message
     completion_model = await CompletionModel.load(block_name)
     prompt = f"Summarize: ```{str(exc)}```."
     response = await completion_model.submit_prompt(prompt)
     interpretation = f"{response.choices[0].text.strip()}"
-    exc_msg = f"{exc}\nOpenAI: {interpretation}"
+    new_exc_msg = f"{exc}\nOpenAI: {interpretation}"
+
     # push the original traceback to the tail so it's not obscured by
     # the additional logic in this except clause
-    raise type(exc)(exc_msg).with_traceback(traceback) from exc
+    raise exc_type(new_exc_msg, *args, **kwargs).with_traceback(exc_traceback) from exc
 
 
 def interpret_exception(block_name: str) -> Callable:
