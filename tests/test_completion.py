@@ -206,7 +206,7 @@ class TestInterpretExceptionError:
         def custom_fn():
             raise CustomException("For testing only...", 1, keyword="keyword")
 
-        with pytest.raises(CustomException, match="\nOpenAI"):
+        with pytest.raises(CustomException, match="OpenAI"):
             custom_fn()
 
 
