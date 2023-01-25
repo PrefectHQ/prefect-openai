@@ -184,18 +184,18 @@ async def _raise_interpreted_exc(block_name: str, exc: Exception):
             # no signature available like ZeroDivisionError
             kwargs = {}
 
-            # create a new message
-            completion_model = await CompletionModel.load(block_name)
-            prompt = f"Summarize: ```{str(exc)}```."
-            response = await completion_model.submit_prompt(prompt)
-            interpretation = f"{response.choices[0].text.strip()}"
-            new_exc_msg = f"{exc}\nOpenAI: {interpretation}"
+        # create a new message
+        completion_model = await CompletionModel.load(block_name)
+        prompt = f"Summarize: ```{str(exc)}```."
+        response = await completion_model.submit_prompt(prompt)
+        interpretation = f"{response.choices[0].text.strip()}"
+        new_exc_msg = f"{exc}\nOpenAI: {interpretation}"
 
-            # push the original traceback to the tail so it's not obscured by
-            # the additional logic in this except clause
-            raise exc_type(new_exc_msg, *args, **kwargs).with_traceback(
-                exc_traceback
-            ) from exc
+        # push the original traceback to the tail so it's not obscured by
+        # the additional logic in this except clause
+        raise exc_type(new_exc_msg, *args, **kwargs).with_traceback(
+            exc_traceback
+        ) from exc
     except Exception:
         # if anything unexpected goes wrong, just raise the original exception
         raise
