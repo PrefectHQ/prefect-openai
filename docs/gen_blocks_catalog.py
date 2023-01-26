@@ -9,7 +9,7 @@ from textwrap import dedent
 import mkdocs_gen_files
 from prefect.blocks.core import Block
 from prefect.utilities.dispatch import get_registry_for_type
-from prefect.utilities.importtools import to_qualified_name
+from prefect.utilities.importtools import from_qualified_name, to_qualified_name
 
 COLLECTION_SLUG = "prefect_openai"
 
@@ -56,14 +56,21 @@ def insert_blocks_catalog(generated_file):
         "or [saved through the UI](https://orion-docs.prefect.io/ui/blocks/).\n"
     )
     for module_nesting, block_names in module_blocks.items():
-        module_path = " ".join(module_nesting)
-        module_title = module_path.replace("_", " ").title()
-        generated_file.write(
-            f"## [{module_title} Module][{COLLECTION_SLUG}.{module_path}]\n"
+        module_path = f"{COLLECTION_SLUG}." + " ".join(module_nesting)
+        module_title = (
+            module_path.replace(COLLECTION_SLUG, "")
+            .lstrip(".")
+            .replace("_", " ")
+            .title()
         )
+        generated_file.write(f"## [{module_title} Module][{module_path}]\n")
         for block_name in block_names:
+            block_obj = from_qualified_name(f"{module_path}.{block_name}")
+            block_description = block_obj.get_description()
+            if not block_description.endswith("."):
+                block_description += "."
             generated_file.write(
-                f"[{block_name}][{COLLECTION_SLUG}.{module_path}.{block_name}]\n"
+                f"[{block_name}][{module_path}.{block_name}]\n\n{block_description}\n\n"
             )
             generated_file.write(
                 dedent(
@@ -71,7 +78,7 @@ def insert_blocks_catalog(generated_file):
                     To load the {block_name}:
                     ```python
                     from prefect import flow
-                    from {COLLECTION_SLUG}.{module_path} import {block_name}
+                    from {module_path} import {block_name}
 
                     @flow
                     def my_flow():
@@ -82,6 +89,11 @@ def insert_blocks_catalog(generated_file):
                     """
                 )
             )
+        generated_file.write(
+            f"For additional examples, check out the [{module_title} Module]"
+            f"(../examples_catalog/#{module_nesting[-1]}-module) "
+            f"under Examples Catalog.\n"
+        )
 
 
 blocks_catalog_path = Path("blocks_catalog.md")

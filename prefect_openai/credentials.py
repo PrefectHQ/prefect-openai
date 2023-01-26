@@ -22,6 +22,14 @@ class OpenAICredentials(CredentialsBlock):
 
         credentials = OpenAICredentials.load("BLOCK_NAME")
         ```
+
+        Get the OpenAPI client:
+        ```python
+        from prefect_openai import OpenAICredentials
+
+        credentials = OpenAICredentials.load("BLOCK_NAME")
+        client = credentials.get_client()
+        ```
     """
 
     _block_type_name = "OpenAI Credentials"

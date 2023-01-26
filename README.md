@@ -22,7 +22,9 @@ Visit the full docs [here](https://PrefectHQ.github.io/prefect-openai) to see ad
 
 The `prefect-openai` collection makes it easy to leverage the capabilities of AI in your flows. Check out the examples below to get started!
 
-## Summarize tracebacks with GPT3
+## Getting Started
+
+### Summarize tracebacks with GPT3
 
 Tracebacks--it's quintessential in programming. They are a record of every line of code leading to the error, to help us, humans, determine what's wrong with the program and find a solution.
 
@@ -90,7 +92,7 @@ On the flip side, the Curie GPT3 model was able to summarize the issue eloquentl
     example_func()
     ```
 
-## Create a story around a flow run name with GPT3 and DALL-E
+### Create a story around a flow run name with GPT3 and DALL-E
 
 Have you marveled at all the AI-generated images and wondered how others did it?
 
@@ -151,26 +153,6 @@ def create_story_and_image_from_flow_run_name() -> str:
 create_story_and_image_from_flow_run_name()
 ```
 
-Visit [Flow Run Name Art](flow_run_name_art) to see some example output!
-
-## Resources
-
-For more tips on how to use tasks and flows in a Collection, check out [Using Collections](https://orion-docs.prefect.io/collections/usage/)!
-
-### Installation
-
-Install `prefect-openai` with `pip`:
-
-```bash
-pip install prefect-openai
-```
-
-Requires an installation of Python 3.7+.
-
-We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.
-
-These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the [Prefect documentation](https://orion-docs.prefect.io/).
-
 ### Saving an OpenAI key
 
 It's easy to set up an `OpenAICredentials` block!
@@ -192,6 +174,26 @@ Congrats! You can now easily load the saved block, which holds your OpenAI API k
 from prefect_openai import OpenAICredentials
 OpenAICredentials.load("BLOCK_NAME_PLACEHOLDER")
 ```
+
+Visit [Flow Run Name Art](flow_run_name_art) to see some example output!
+
+## Resources
+
+For more tips on how to use tasks and flows in a Collection, check out [Using Collections](https://orion-docs.prefect.io/collections/usage/)!
+
+### Installation
+
+Install `prefect-openai` with `pip`:
+
+```bash
+pip install prefect-openai
+```
+
+Requires an installation of Python 3.7+.
+
+We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.
+
+These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the [Prefect documentation](https://orion-docs.prefect.io/).
 
 ### Feedback
 
