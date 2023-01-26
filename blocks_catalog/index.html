@@ -51,6 +51,18 @@
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-8CSMBCQDKN"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-8CSMBCQDKN",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-8CSMBCQDKN",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
 
     
     
@@ -499,6 +511,7 @@ on Prefect Cloud:
 Note, to use the <code>load</code> method on Blocks, you must already have a block document <a href="https://orion-docs.prefect.io/concepts/blocks/#saving-blocks">saved through code</a> or <a href="https://orion-docs.prefect.io/ui/blocks/">saved through the UI</a>.</p>
 <h2 id="credentials-module"><a class="autorefs autorefs-internal" href="../credentials/#prefect_openai.credentials">Credentials Module</a></h2>
 <p><a class="autorefs autorefs-internal" href="../credentials/#prefect_openai.credentials.OpenAICredentials">OpenAICredentials</a></p>
+<p>Credentials used to authenticate with OpenAI.</p>
 <p>To load the OpenAICredentials:
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
 <span class="kn">from</span> <span class="nn">prefect_openai.credentials</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span>
@@ -508,9 +521,12 @@ Note, to use the <code>load</code> method on Blocks, you must already have a blo
     <span class="n">my_block</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
 
 <span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div></p>
+</code></pre></div>
+For additional examples, check out the <a href="../examples_catalog/#credentials-module">Credentials Module</a> under Examples Catalog.</p>
 <h2 id="completion-module"><a class="autorefs autorefs-internal" href="../completion/#prefect_openai.completion">Completion Module</a></h2>
 <p><a class="autorefs autorefs-internal" href="../completion/#prefect_openai.completion.CompletionModel">CompletionModel</a></p>
+<p>A block that contains config for an OpenAI Completion Model.
+Learn more in the <a href="https://beta.openai.com/docs/guides/completion">OpenAPI Text Completion docs</a>.</p>
 <p>To load the CompletionModel:
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
 <span class="kn">from</span> <span class="nn">prefect_openai.completion</span> <span class="kn">import</span> <span class="n">CompletionModel</span>
@@ -520,9 +536,12 @@ Note, to use the <code>load</code> method on Blocks, you must already have a blo
     <span class="n">my_block</span> <span class="o">=</span> <span class="n">CompletionModel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
 
 <span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div></p>
+</code></pre></div>
+For additional examples, check out the <a href="../examples_catalog/#completion-module">Completion Module</a> under Examples Catalog.</p>
 <h2 id="image-module"><a class="autorefs autorefs-internal" href="../image/#prefect_openai.image">Image Module</a></h2>
 <p><a class="autorefs autorefs-internal" href="../image/#prefect_openai.image.ImageModel">ImageModel</a></p>
+<p>A block that contains config for an OpenAI Image Model.
+Learn more in the <a href="https://beta.openai.com/docs/guides/images">OpenAPI Image generation docs</a>.</p>
 <p>To load the ImageModel:
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
 <span class="kn">from</span> <span class="nn">prefect_openai.image</span> <span class="kn">import</span> <span class="n">ImageModel</span>
@@ -532,8 +551,11 @@ Note, to use the <code>load</code> method on Blocks, you must already have a blo
     <span class="n">my_block</span> <span class="o">=</span> <span class="n">ImageModel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
 
 <span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div></p>
+</code></pre></div>
+For additional examples, check out the <a href="../examples_catalog/#image-module">Image Module</a> under Examples Catalog.</p>
 
+
+  
 
 
 

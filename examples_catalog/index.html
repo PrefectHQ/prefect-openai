@@ -51,6 +51,18 @@
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-8CSMBCQDKN"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-8CSMBCQDKN",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-8CSMBCQDKN",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
 
     
     
@@ -317,6 +329,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#credentials-module" class="md-nav__link">
+    Credentials Module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#image-module" class="md-nav__link">
     Image Module
   </a>
@@ -457,6 +476,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#credentials-module" class="md-nav__link">
+    Credentials Module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#image-module" class="md-nav__link">
     Image Module
   </a>
@@ -482,23 +508,7 @@
 <h1 id="examples-catalog">Examples Catalog</h1>
 <p>Below is a list of examples for <code>prefect-openai</code>.</p>
 <h2 id="completion-module"><a class="autorefs autorefs-internal" href="../completion/#prefect_openai.completion">Completion Module</a></h2>
-<p>Create an OpenAI Completion given a prompt:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
-<span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">CompletionModel</span><span class="p">,</span> <span class="n">OpenAICredentials</span>
-
-<span class="nd">@flow</span><span class="p">(</span><span class="n">log_prints</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">my_ai_bot</span><span class="p">(</span><span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text-davinci-003&quot;</span><span class="p">)</span>
-    <span class="n">credentials</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;my-openai-creds&quot;</span><span class="p">)</span>
-
-    <span class="n">completion_model</span> <span class="o">=</span> <span class="n">CompletionModel</span><span class="p">(</span>
-        <span class="n">openai_credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hi!&quot;</span><span class="p">,</span> <span class="s2">&quot;what is the meaning of life?&quot;</span><span class="p">]:</span>
-        <span class="n">completion</span> <span class="o">=</span> <span class="n">completion_model</span><span class="o">.</span><span class="n">submit_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">completion</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
-Interpret the exception raised from a flow.
+<p>Interpret the exception raised from a flow.
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">httpx</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
 <span class="kn">from</span> <span class="nn">prefect_openai.completion</span> <span class="kn">import</span> <span class="n">interpret_exception</span>
@@ -527,6 +537,34 @@ Interpret the exception raised from a flow.
     <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
 <span class="n">example_flow</span><span class="p">()</span>
+</code></pre></div>
+Create an OpenAI Completion given a prompt:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
+<span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">CompletionModel</span><span class="p">,</span> <span class="n">OpenAICredentials</span>
+
+<span class="nd">@flow</span><span class="p">(</span><span class="n">log_prints</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_ai_bot</span><span class="p">(</span><span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text-davinci-003&quot;</span><span class="p">)</span>
+    <span class="n">credentials</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;my-openai-creds&quot;</span><span class="p">)</span>
+
+    <span class="n">completion_model</span> <span class="o">=</span> <span class="n">CompletionModel</span><span class="p">(</span>
+        <span class="n">openai_credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hi!&quot;</span><span class="p">,</span> <span class="s2">&quot;what is the meaning of life?&quot;</span><span class="p">]:</span>
+        <span class="n">completion</span> <span class="o">=</span> <span class="n">completion_model</span><span class="o">.</span><span class="n">submit_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">completion</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div></p>
+<h2 id="credentials-module"><a class="autorefs autorefs-internal" href="../credentials/#prefect_openai.credentials">Credentials Module</a></h2>
+<p>Load a configured block:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span>
+
+<span class="n">credentials</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;BLOCK_NAME&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<p>Get the OpenAPI client:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect_openai</span> <span class="kn">import</span> <span class="n">OpenAICredentials</span>
+
+<span class="n">credentials</span> <span class="o">=</span> <span class="n">OpenAICredentials</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;BLOCK_NAME&quot;</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">credentials</span><span class="o">.</span><span class="n">get_client</span><span class="p">()</span>
 </code></pre></div></p>
 <h2 id="image-module"><a class="autorefs autorefs-internal" href="../image/#prefect_openai.image">Image Module</a></h2>
 <p>Create an OpenAI Image given a prompt:
@@ -536,6 +574,8 @@ Interpret the exception raised from a flow.
 <span class="n">image_model</span><span class="o">.</span><span class="n">submit_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;A prompt for an image.&quot;</span><span class="p">)</span>
 </code></pre></div></p>
 
+
+  
 
 
 
