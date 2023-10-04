@@ -12,7 +12,13 @@ from prefect.flows import Flow
 from prefect.logging.loggers import get_logger, get_run_logger
 from prefect.tasks import Task
 from prefect.utilities.asyncutils import is_async_fn, sync_compatible
-from pydantic import Field
+from pydantic import VERSION as PYDANTIC_VERSION
+
+if PYDANTIC_VERSION.startswith("2."):
+    from pydantic.v1 import Field
+else:
+    from pydantic import Field
+
 from typing_extensions import Literal
 
 from prefect_openai import OpenAICredentials
