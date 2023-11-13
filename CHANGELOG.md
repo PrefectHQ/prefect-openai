@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- pin `openai` to pre 1.0.0 release
+
 ### Security
 
 ## 0.1.1
