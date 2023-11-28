@@ -38,7 +38,7 @@ class OpenAICredentials(CredentialsBlock):
     """
 
     _block_type_name = "OpenAI Credentials"
-    _logo_url = "https://images.ctfassets.net/gm98wzqotmnx/QE8JwcbZBmIfiognXDLcY/2bcd4c759f877d37159f576101218b49/open-ai-logo-8B9BFEDC26-seeklogo.com.png?h=250"  # noqa
+    _logo_url = "https://cdn.sanity.io/images/3ugk85nk/production/760539393a7dbf93a143fb01c2a8b0fe7157a8d8-247x250.png"  # noqa
     _documentation_url = "https://prefecthq.github.io/prefect-openai/credentials/#prefect_openai.credentials.OpenAICredentials"  # noqa
 
     api_key: SecretStr = Field(
